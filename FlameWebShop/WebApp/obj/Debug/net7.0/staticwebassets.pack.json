@@ -1,27 +1,27 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\Jakob\\Desktop\\FlameWebbShop\\FlameWebbShop\\WebApp\\wwwroot\\Images\\office-style.png",
+      "Id": "C:\\Users\\Jakob\\Desktop\\FlameWebbShop\\FlameWebShop\\WebApp\\wwwroot\\Images\\office-style.png",
       "PackagePath": "staticwebassets\\Images\\office-style.png"
     },
     {
-      "Id": "C:\\Users\\Jakob\\Desktop\\FlameWebbShop\\FlameWebbShop\\WebApp\\wwwroot\\Images\\party-style.png",
+      "Id": "C:\\Users\\Jakob\\Desktop\\FlameWebbShop\\FlameWebShop\\WebApp\\wwwroot\\Images\\party-style.png",
       "PackagePath": "staticwebassets\\Images\\party-style.png"
     },
     {
-      "Id": "C:\\Users\\Jakob\\Desktop\\FlameWebbShop\\FlameWebbShop\\WebApp\\wwwroot\\Images\\showcase-img.png",
+      "Id": "C:\\Users\\Jakob\\Desktop\\FlameWebbShop\\FlameWebShop\\WebApp\\wwwroot\\Images\\showcase-img.png",
       "PackagePath": "staticwebassets\\Images\\showcase-img.png"
     },
     {
-      "Id": "C:\\Users\\Jakob\\Desktop\\FlameWebbShop\\FlameWebbShop\\WebApp\\wwwroot\\css\\site.css",
+      "Id": "C:\\Users\\Jakob\\Desktop\\FlameWebbShop\\FlameWebShop\\WebApp\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
-      "Id": "C:\\Users\\Jakob\\Desktop\\FlameWebbShop\\FlameWebbShop\\WebApp\\wwwroot\\favicon.ico",
+      "Id": "C:\\Users\\Jakob\\Desktop\\FlameWebbShop\\FlameWebShop\\WebApp\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
-      "Id": "C:\\Users\\Jakob\\Desktop\\FlameWebbShop\\FlameWebbShop\\WebApp\\wwwroot\\js\\site.js",
+      "Id": "C:\\Users\\Jakob\\Desktop\\FlameWebbShop\\FlameWebShop\\WebApp\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },
     {

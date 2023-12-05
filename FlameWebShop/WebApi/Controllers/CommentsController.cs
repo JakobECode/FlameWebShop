@@ -16,7 +16,7 @@ namespace WebApi.Controllers
         private readonly CommentRepository _commentRepository;
 
         // Konstruktor för CommentsController Initialiserar _commentRepository-fältet med den instans som
-        // förmedlas vid instansiering. Denna beroendeinjektion underlättar testning och underhåll.
+        // förmedlas vid instansiering. Denna beroendeinjektion undhehe erlättar testning och underhåll.
         public CommentsController(CommentRepository commentRepository)
         {
             _commentRepository = commentRepository;
