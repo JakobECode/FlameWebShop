@@ -1,0 +1,13 @@
+﻿@model IEnumerable<Product>
+
+<section class="collection-grid">
+    <div class="container">
+        <div class="item-collection">
+
+            @foreach (Product product in Model)
+            {
+                <partial name="_CollectionItemPartial" model="product" />
+            }
+        </div>
+    </div>
+</section>

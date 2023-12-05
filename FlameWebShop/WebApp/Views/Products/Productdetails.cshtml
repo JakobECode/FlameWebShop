@@ -1,0 +1,26 @@
+﻿@using WebApp.Models.Dtos;
+@model Product
+
+<div class="Container d-flex justify-content-center">
+    <div class="image-section">
+        <img src="@Model.ImageUrl"
+             alt="" />
+    </div>
+
+    <div class="body-section">
+        <div class="category">@Model.Category!.CategoryName</div>
+        <h2 class="name">@Model.Title</h2>
+        <partial name="_StarRatingPartial" model="@Model.StarRating" />
+
+        <p>@Model.Description</p>
+
+        <h3 class="mt-5">$@Model.Price</h3>
+
+        <div class="menu">
+            <a class="btn-theme" asp-action="ProductDetails" asp-controller="Products" asp-route-id="@Model.Id">
+                ADD TO CART
+            </a>
+        </div>
+    </div>
+
+</div>

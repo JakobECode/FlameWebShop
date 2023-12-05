@@ -1,0 +1,26 @@
+﻿@using WebApp.ViewModels
+@model ContactFormViewModel
+
+<section class="contact-form">
+    <div class="container">
+        <h1>Come in Contact with Us</h1>
+        <form asp-controller="Contacts" asp-action="Index" method="post" class="container mt-4 " novalidate>
+
+            <div asp-validation-summary="ModelOnly"></div>
+            <div class="contact-form-name">
+                <input asp-for="Name" placeholder="Your Name" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="contact-form-email">
+                <input asp-for="Email" placeholder="Your Email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="contact-form-comments">
+                <textarea asp-for="CommentsText" id="comments" name="CommentsText" placeholder="Comments"></textarea>
+                <span asp-validation-for="CommentsText" class="text-danger"></span>
+            </div>
+
+            <button class="btn-theme" type="submit">Post Comments</button>
+        </form>
+    </div>
+</section>ct

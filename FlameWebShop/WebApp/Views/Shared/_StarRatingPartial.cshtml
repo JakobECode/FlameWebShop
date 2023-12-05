@@ -1,0 +1,16 @@
+﻿@model int
+
+<div class="star-rating">
+
+	@for (int i = 0; i < 5; i++)
+	{
+		string rating = "";
+
+		if (Model <= i)
+			rating = "fa-regular";
+		else
+			rating = "fa-solid";
+
+		<i class="fa-sharp fa-star @rating"></i>
+	}
+</div>
