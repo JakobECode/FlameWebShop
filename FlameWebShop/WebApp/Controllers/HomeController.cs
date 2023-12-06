@@ -25,7 +25,7 @@ namespace WebApp.Controllers
                 Popular = popularProducts.ToList()
             };
 
-            return View();
+            return View(model);
         }
     }
 }

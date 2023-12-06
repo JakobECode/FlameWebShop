@@ -8,7 +8,7 @@ namespace WebApi.Models.Entities
         public int Id { get; set; }
         public string CategoryName { get; set; } = null!;
 
-        public IEnumerable<ProductEntity> Products { get; set; } = new List<ProductEntity>();
+        //public IEnumerable<ProductEntity> Products { get; set; } = new List<ProductEntity>();
     }
 }
 // Attributet [Key] indikerar att denna egenskap är den primära nyckeln i en databastabell.

@@ -1,1 +1,3 @@
 FlameWebShop/.vs
+FlameWebShop\WebApi\obj\*
+FlameWebShop\WebApi\bin\*

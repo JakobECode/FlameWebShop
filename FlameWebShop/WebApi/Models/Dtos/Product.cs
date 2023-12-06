@@ -12,7 +12,7 @@ namespace WebApi.Models.Dtos
         public string ImageUrl { get; set; }
         public int CategoryId { get; set; }
         public string Tag { get; set; } = null!;
-        public Category? Category { get; set; }
+        //public Category? Category { get; set; }
 
         // Definierar en implicit konvertering från ProductEntity till Product.
         // Detta gör det möjligt att automatiskt konvertera en ProductEntity-instans till en Product-instans.
@@ -26,7 +26,7 @@ namespace WebApi.Models.Dtos
                 Price = entity.Price,
                 StarRating = entity.StarRating,
                 ImageUrl = entity.ImageUrl,
-                Category = entity.Category,
+                //Category = entity.Category,
                 Tag = entity.Tag!
             };
         }

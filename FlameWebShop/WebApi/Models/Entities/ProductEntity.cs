@@ -25,7 +25,7 @@ namespace WebApi.Models.Entities
 
         public int CategoryId { get; set; }
 
-        public CategoryEntity Category { get; set; } = null!;
+        //public CategoryEntity Category { get; set; } = null!;
         public string? Tag {  get; set; }    
     }
     //Klassen ProductEntity används för att representera en produkt i en databas.

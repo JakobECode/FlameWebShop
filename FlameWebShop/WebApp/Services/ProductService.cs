@@ -37,7 +37,7 @@ namespace WebApp.Services
             using var http = new HttpClient();
             var products = await http.GetFromJsonAsync<IEnumerable<Product>>(_api.ApiAddressRoot($"/products/tag?tag={tag}&x-api-key={_api.ApiKey()}"));
 
-            return products!;
+            return products;
         }
 
         public async Task<HttpResponseMessage> CreateAsync(Product product)
