@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "PFLV0bocRvvr7nJdGFy+tMpnXN1H3P0FiwJdJDo+ehCUDk/zQRvXG5FJzV84DHmcNfKJLnrge+ycJINImWwP2g==",
+  "dgSpecHash": "Fste/z+P+JU+eqsuhSn2DooWboRu8TluxyUi6qGK3petV9k9CSE2MGB/ofMzn1BSmzQb9l2BpC7+j85VnLF8jg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Jakob\\Desktop\\FlameWebbShop\\FlameWebShop\\WebApp\\WebApp.csproj",
   "expectedPackageFiles": [
@@ -30,5 +30,26 @@
     "C:\\Users\\Jakob\\.nuget\\packages\\system.text.encodings.web\\7.0.0\\system.text.encodings.web.7.0.0.nupkg.sha512",
     "C:\\Users\\Jakob\\.nuget\\packages\\system.text.json\\7.0.0\\system.text.json.7.0.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1902",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'System.IdentityModel.Tokens.Jwt' 7.0.3 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-59j7-ghrg-fj52",
+      "libraryId": "System.IdentityModel.Tokens.Jwt",
+      "targetGraphs": [
+        "net7.0"
+      ]
+    },
+    {
+      "code": "NU1902",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'System.IdentityModel.Tokens.Jwt' 7.0.3 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-8g9c-28fc-mcx2",
+      "libraryId": "System.IdentityModel.Tokens.Jwt",
+      "targetGraphs": [
+        "net7.0"
+      ]
+    }
+  ]
 }

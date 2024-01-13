@@ -171,3 +171,14 @@ C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\obj\Debug\net7.0\refint
 C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\obj\Debug\net7.0\WebApi.pdb
 C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\obj\Debug\net7.0\WebApi.genruntimeconfig.cache
 C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\obj\Debug\net7.0\ref\WebApi.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\bin\Debug\net7.0\Microsoft.Extensions.Configuration.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\bin\Debug\net7.0\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\bin\Debug\net7.0\Microsoft.Extensions.Configuration.FileExtensions.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\bin\Debug\net7.0\Microsoft.Extensions.Configuration.Json.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\bin\Debug\net7.0\Microsoft.Extensions.FileProviders.Abstractions.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\bin\Debug\net7.0\Microsoft.Extensions.FileProviders.Physical.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\bin\Debug\net7.0\Microsoft.Extensions.FileSystemGlobbing.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\bin\Debug\net7.0\Microsoft.Extensions.Primitives.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\bin\Debug\net7.0\System.Text.Encodings.Web.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\bin\Debug\net7.0\System.Text.Json.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\bin\Debug\net7.0\runtimes\browser\lib\net7.0\System.Text.Encodings.Web.dll

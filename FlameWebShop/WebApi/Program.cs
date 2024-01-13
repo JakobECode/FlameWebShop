@@ -21,8 +21,8 @@ namespace WebApi
             builder.Services.AddSwaggerGen();
 
             #region DbContexts
-            builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("Data")));
-            builder.Services.AddDbContext<IdentityContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("Identity")));
+            builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("DBFlameShopCS")));
+            builder.Services.AddDbContext<IdentityContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("DBFlameIdentity")));
             #endregion
 
             #region Repositories
