@@ -105,35 +105,26 @@ namespace WebApi.Helpers.Services
             }
         }
 
-        public async Task<bool> UpdateAsync(int id, Product product)
+        public async Task<bool> UpdateAsync(Product product)
         {
             if (product == null)
             {
                 throw new ArgumentNullException(nameof(product));
             }
-            if (id != product.Id)
-            {
-                // Hantera fallet där id inte matchar product.Id
-                return false;
-            }
-
             try
             {
-                var existingEntity = await _productRepo.GetAsync(x => x.Id == product.Id);
-                if (existingEntity == null)
-                {
-                    // Loggar om produkten inte hittades
-                    // Log.Information($"Produkt med ID {product.Id} hittades inte.");
-                    return false;
-                }
-
-
+                //var existingEntity = await _productRepo.GetAsync(x => x.Id == product.Id);
+                //if (existingEntity == null)
+                //{
+                   
+                //    // Log.Information($"Produkt med ID {product.Id} hittades inte.");
+                //    return false;
+                //}
                 var resultEntity = await _productRepo.UpdateAsync(product);
                 return resultEntity != null;
             }
             catch (Exception ex)
             {
-                // Loggar undantaget
                 // Log.Error(ex, $"Ett undantag inträffade vid uppdatering av produkt: {ex.Message}");
                 return false;
             }

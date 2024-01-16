@@ -92,9 +92,9 @@ namespace WebApi.Controllers
             // Anropar ProductService för att ta bort en produkt baserat på ID och returnerar resultatet.
             var success = await _productService.DeleteAsync(id);
             if (success)
-                return Ok(); // Returnerar OK-status om produkten lyckades raderas.
+                return Ok(); 
             else
-                return NotFound(); // Returnerar NotFound-status om ingen produkt hittades för att radera.
+                return NotFound(); 
         }
 
         [Route("update")]
@@ -108,16 +108,15 @@ namespace WebApi.Controllers
 
             try
             {
-                var existingProduct = await _productService.GetAsync(x => x.Id == product.Id);
-                if (existingProduct == null)
-                {
-                    return NotFound($"Produkt med ID {id} hittades inte.");
-                }
-
-                var success = await _productService.UpdateAsync(id, product);
+                //var existingProduct = await _productService.GetAsync(x => x.Id == product.Id);
+                //if (existingProduct == null)
+                //{
+                //    return NotFound($"Produkt med ID {id} hittades inte.");
+                //}
+                var success = await _productService.UpdateAsync(product);
                 if (success)
                 {
-                    return Ok($"Produkt med ID {id} har uppdaterats.");
+                    return Ok($"Produkt med ID {product.Id} har uppdaterats.");
                 }
                 else
                 {

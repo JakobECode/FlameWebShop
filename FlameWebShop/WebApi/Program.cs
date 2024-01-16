@@ -22,30 +22,30 @@ namespace WebApi
 
             #region DbContexts
             builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("DBFlameShopCS")));
-            builder.Services.AddDbContext<IdentityContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("DBFlameIdentity")));
+            //builder.Services.AddDbContext<IdentityContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("DBFlameIdentity")));
             #endregion
 
             #region Repositories
             builder.Services.AddScoped<ProductRepository>();
             builder.Services.AddScoped<CategoryRepository>();
-            builder.Services.AddScoped<UserProfileRepository>();
+            //builder.Services.AddScoped<UserProfileRepository>();
             builder.Services.AddScoped<CommentRepository>();
             #endregion
 
             #region Services
-            builder.Services.AddScoped<AuthenticationService>();
+            //builder.Services.AddScoped<AuthenticationService>();
             builder.Services.AddScoped<ProductService>();
             builder.Services.AddScoped<CategoryService>();
             #endregion
 
             #region Authentication
             // Lägger till och konfigurerar ASP.NET Core Identity i tjänstesamlingen.
-            builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
-            {
-                // Konfigurerar Identity för att kräva att varje användare har en unik e-postadress.
-                options.User.RequireUniqueEmail = true; })
-                .AddEntityFrameworkStores<IdentityContext>()// Specifierar att Entity Framework ska användas för att lagra identitetsdata.
-                .AddDefaultTokenProviders();// Lägger till standardtoken-leverantörer för saker som återställning av lösenord.
+            //builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            //{
+            //    // Konfigurerar Identity för att kräva att varje användare har en unik e-postadress.
+            //    options.User.RequireUniqueEmail = true; })
+            //    .AddEntityFrameworkStores<IdentityContext>()// Specifierar att Entity Framework ska användas för att lagra identitetsdata.
+            //    .AddDefaultTokenProviders();// Lägger till standardtoken-leverantörer för saker som återställning av lösenord.
 
             // Lägger till och konfigurerar autentiseringstjänster för applikationen.
             builder.Services.AddAuthentication(x =>
