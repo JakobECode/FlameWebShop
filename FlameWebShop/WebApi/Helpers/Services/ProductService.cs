@@ -26,13 +26,19 @@ namespace WebApi.Helpers.Services
             _categoryRepo = categoryRepo;
         }
 
-        // En asynkron metod för att skapa en ny produkt.
-        // Konverterar Product till ProductEntity och använder ProductRepository för att lägga till den i databasen.
-
-        public async Task<ProductEntity> CreateAsync(Product product)
+        public async Task<ProductEntity> AddAsync(Product product)
         {
             ProductEntity entity = product;
             return await _productRepo.AddAsync(entity);
+        }
+
+        // Asynkron metod för att hämta en specifik produkt baserat på ett givet villkor.
+        // Använder ProductRepository för att hitta produkten och konverterar den till Product.
+        public async Task<Product> GetAsync(Expression<Func<ProductEntity, bool>> expression)
+        {
+            var entity = await _productRepo.GetAsync(expression); // Hämtar produktentiteten baserat på villkoret.
+            Product product = entity; // Konverterar ProductEntity till Product.
+            return product; // Returnerar produkten.
         }
 
         // En asynkron metod för att hämta alla produkter.
@@ -80,15 +86,59 @@ namespace WebApi.Helpers.Services
             catch (Exception ex) { Debug.WriteLine(ex.Message); }  // Skriver ut felmeddelandet vid undantag.
             return null!;
         }
-
-        // Asynkron metod för att hämta en specifik produkt baserat på ett givet villkor.
-        // Använder ProductRepository för att hitta produkten och konverterar den till Product.
-        public async Task<Product> GetAsync(Expression<Func<ProductEntity, bool>> expression)
+        public async Task<bool> DeleteAsync(int id)
         {
-            var entity = await _productRepo.GetAsync(expression); // Hämtar produktentiteten baserat på villkoret.
-            Product product = entity; // Konverterar ProductEntity till Product.
-            return product; // Returnerar produkten.
+            try
+            {
+                var entity = await _productRepo.GetAsync(x => x.Id == id); // Hämtar produktentiteten baserat på ID.
+                if (entity == null)
+                {
+                    return false; // Returnerar false om ingen produkt hittades.
+                }
+                await _productRepo.DeleteAsync(entity); // Tar bort produktentiteten.
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message); // Skriver ut felmeddelandet vid undantag.
+                return false;
+            }
         }
+
+        public async Task<bool> UpdateAsync(int id, Product product)
+        {
+            if (product == null)
+            {
+                throw new ArgumentNullException(nameof(product));
+            }
+            if (id != product.Id)
+            {
+                // Hantera fallet där id inte matchar product.Id
+                return false;
+            }
+
+            try
+            {
+                var existingEntity = await _productRepo.GetAsync(x => x.Id == product.Id);
+                if (existingEntity == null)
+                {
+                    // Loggar om produkten inte hittades
+                    // Log.Information($"Produkt med ID {product.Id} hittades inte.");
+                    return false;
+                }
+
+
+                var resultEntity = await _productRepo.UpdateAsync(product);
+                return resultEntity != null;
+            }
+            catch (Exception ex)
+            {
+                // Loggar undantaget
+                // Log.Error(ex, $"Ett undantag inträffade vid uppdatering av produkt: {ex.Message}");
+                return false;
+            }
+        }
+
     }
 }
 /*

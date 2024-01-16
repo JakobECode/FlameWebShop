@@ -32,13 +32,13 @@ namespace WebApi.Controllers
         }
 
         // En HTTP GET metod för att hämta alla kommentarer. [Route("all")] definierar sub-routen för denna åtgärd.
-        [Route("all")]
-        [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
-        {
-            // Anropar CommentRepository för att hämta alla kommentarer och returnerar dem.
-            return Ok(await _commentRepository.GetAllAsync());
-        }
+        //[Route("all")]
+        //[HttpGet]
+        //public async Task<IActionResult> GetCommentAsync()
+        //{
+        //    // Anropar CommentRepository för att hämta alla kommentarer och returnerar dem.
+        //    return Ok(await _commentRepository.GetCommentAsync());
+        //}
     }
 
    

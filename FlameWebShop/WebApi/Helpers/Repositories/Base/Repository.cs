@@ -29,9 +29,6 @@ namespace WebApi.Helpers.Repositories.Base
             catch (Exception ex) { Debug.WriteLine(ex.Message); }
             return entity;
         }
-
-
-
         // Metod för att kontrollera om någon entitet uppfyller ett visst villkor asynkront.
         // Returnerar true om villkoret uppfylls, annars false.
         public virtual async Task<bool> FindAsync(Expression<Func<TEntity, bool>> expression)
@@ -82,42 +79,30 @@ namespace WebApi.Helpers.Repositories.Base
         }
 
         // Metod för att uppdatera en befintlig entitet i databasen asynkront.
-        //public virtual async Task<TEntity> UpdateAsync(TEntity entity)
-        //{
-        //    try
-        //    {
-        //        _context.Set<TEntity>().Update(entity);
-        //        await _context.SaveChangesAsync();
-        //        return entity;
-        //    }
-        //    catch (Exception ex) { Debug.WriteLine(ex.Message); }
-        //    return entity;
-        //}
-
-        // Metod för att ta bort en entitet från databasen asynkront.
-        // Returnerar true om borttagningen lyckades, annars false.
-        //public virtual async Task<bool> DeleteAsync(TEntity entity)
-        //{
-        //    try
-        //    {
-        //        _context.Set<TEntity>().Remove(entity);
-        //        await _context.SaveChangesAsync();
-        //        return true;
-        //    }
-        //    catch (Exception ex) { Debug.WriteLine(ex.Message); }
-        //    return false;
-        //}
-
         public virtual async Task<TEntity> UpdateAsync(TEntity entity)
         {
-            _context.Set<TEntity>().Update(entity);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Set<TEntity>().Update(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+            catch (Exception ex) { Debug.WriteLine(ex.Message); }
             return entity;
         }
-        public virtual async Task DeleteAsync(TEntity entity)
+
+        // Metod för att ta bort en entitet från databasen asynkront.
+        //Returnerar true om borttagningen lyckades, annars false.
+        public virtual async Task<bool> DeleteAsync(TEntity entity)
         {
-            _context.Set<TEntity>().Remove(entity);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Set<TEntity>().Remove(entity);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex) { Debug.WriteLine(ex.Message); }
+            return false;
         }
         /*
         Denna klass är en generisk abstrakt klass som representerar en generisk repository för att hantera 

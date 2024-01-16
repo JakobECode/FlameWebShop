@@ -21,43 +21,72 @@ namespace WebApi.Helpers.Repositories
             _context = context;
         }
 
-        //public override async Task<IEnumerable<ProductEntity>> GetAllAsync()
-        //{
-        //    try
-        //    {
-        //        var SqlQuery = "SELECT * FROM Products";
-        //        var results = await _context.Products.FromSqlRaw(SqlQuery).ToListAsync();
-
-        //        return results;
-        //    }
-        //    catch (Exception ex) { Debug.WriteLine(ex.Message); }
-        //    return null!;
-
-        //}
-
-        //public override async Task<IEnumerable<ProductEntity>> GetAllAsync()
-        //{
-        //    try
-        //    {
-        //        var result = await _context.Products.Include("Tag").ToListAsync();
-        //        return result;
-        //    }
-        //    catch (Exception ex) { Debug.WriteLine(ex.Message); }
-        //    return null!;
-        //}
-
+        public override async Task<ProductEntity> GetAsync(Expression<Func<ProductEntity, bool>> expression)
+        {
+            try
+            {
+                var entity = await _context.Products.FirstOrDefaultAsync(expression);
+                return entity!;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return null!;
+            }
+        }
         public override async Task<IEnumerable<ProductEntity>> GetAllAsync(Expression<Func<ProductEntity, bool>> expression)
         {
             try
             {
-                var result = await _context.Products.Include("Category").Where(expression).ToListAsync();
+                var result = await _context.Products.Where(expression).ToListAsync();
 
                 return result;
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message); }
             return null!;
         }
-
+        public override async Task<ProductEntity> AddAsync(ProductEntity entity)
+        {
+            try
+            {
+                var result = await _context.Products.AddAsync(entity);
+                await _context.SaveChangesAsync();
+                return result.Entity;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return null!;
+            }
+        }
+        public override async Task<ProductEntity> UpdateAsync(ProductEntity entity)
+        {
+            try
+            {
+                _context.Products.Update(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return entity;
+            }
+        }
+        public override async Task<bool> DeleteAsync(ProductEntity entity)
+        {
+            try
+            {
+                _context.Products.Remove(entity);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return false;
+            }
+        }
         /*
           ProductRepository-klassen är en specialisering av den generiska Repository-klassen för att
           hantera ProductEntity-objekt. Det är en del av datalagret och erbjuder en samling av metoder för 
