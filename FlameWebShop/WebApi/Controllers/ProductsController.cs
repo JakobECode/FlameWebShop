@@ -58,22 +58,22 @@ namespace WebApi.Controllers
         }
 
         // HTTP GET metod för att hämta en produkt baserat på dess ID. [Route("id")] definierar sub-routen för denna åtgärd.
-        [Route("id")]
-        [HttpGet]
-        public async Task<IActionResult> GetByIdAsync(int id)
-        {
-            // Anropar ProductService för att hämta en produkt baserat på ID och returnerar den.
-            return Ok(await _productService.GetAsync(x => x.Id == id));
-        }
+        //[Route("id")]
+        //[HttpGet]
+        //public async Task<IActionResult> GetByIdAsync(int id)
+        //{
+        //    // Anropar ProductService för att hämta en produkt baserat på ID och returnerar den.
+        //    return Ok(await _productService.GetAsync(x => x.Id == id));
+        //}
 
         // En HTTP GET metod för att hämta produkter baserat på deras tagg. [Route("tag")] definierar sub-routen för denna åtgärd.
-        [Route("tag")]
-        [HttpGet]
-        public async Task<IActionResult> GetByTagAsync(string tag)
-        {
-            // Anropar ProductService för att hämta produkter baserat på tagg och returnerar dem.
-            return Ok(await _productService.GetAllAsync(x => x.Tag == tag));
-        }
+        //[Route("tag")]
+        //[HttpGet]
+        //public async Task<IActionResult> GetByTagAsync(string tag)
+        //{
+        //    // Anropar ProductService för att hämta produkter baserat på tagg och returnerar dem.
+        //    return Ok(await _productService.GetAllAsync(x => x.Tag == tag));
+        //}
 
         // En HTTP POST metod för att lägga till en ny produkt. [Route("add")] definierar sub-routen för denna åtgärd.
         [Route("add")]
@@ -130,7 +130,26 @@ namespace WebApi.Controllers
                 return StatusCode(500, "Ett internt serverfel inträffade.");
             }
         }
+        [Route("insert")]
+        [HttpPut]
+       public async Task<IActionResult> InsertAsync(Product product)
+{
+    try
+    {
+        // Anta att du har en repository eller tjänst som hanterar databasoperationer
+        // Du behöver implementera detta beroende på din specifika databas och struktur.
 
+        // Exempel: Anropa en metod för att lägga till produkten i databasen
+        var result = await _productService.InsertAsync(product);
+
+        return Ok(result); // Status 200 OK om allt gick bra
+    }
+    catch (Exception ex)
+    {
+        // Logga felet eller hantera det på annat sätt
+        return StatusCode(500, $"Ett fel uppstod: {ex.Message}");
+    }
+}
     }
 }
 /*

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using System.Linq.Expressions;
 using WebApi.Context;
 using WebApi.Helpers.Repositories;
@@ -127,6 +128,28 @@ namespace WebApi.Helpers.Services
             {
                 // Log.Error(ex, $"Ett undantag inträffade vid uppdatering av produkt: {ex.Message}");
                 return false;
+            }
+        }
+        public async Task<Product> InsertAsync(Product product)
+        {
+            try
+            {
+                // Här kan du t.ex. validera produkten innan insättning
+                // Implementera valideringslogik enligt dina behov
+
+                // Lägg till produkten i kontexten
+                _context.Products.Add(product);
+
+                // Spara ändringar i databasen
+                await _context.SaveChangesAsync();
+
+                // Returnera den insatta produkten om det behövs
+                return product;
+            }
+            catch (Exception ex)
+            {
+                // Logga felet eller kasta undantaget vidare om det behövs
+                throw new Exception("Misslyckades med att lägga till produkt.", ex);
             }
         }
 

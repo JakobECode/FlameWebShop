@@ -104,6 +104,20 @@ namespace WebApi.Helpers.Repositories.Base
             catch (Exception ex) { Debug.WriteLine(ex.Message); }
             return false;
         }
+        public virtual async Task<TEntity> InsertAsync(TEntity entity)
+        {
+            try
+            {
+                _context.Set<TEntity>().Add(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Misslyckades med att lägga till entitet: {ex.Message}");
+                throw; // Kasta undantaget vidare så att det kan hanteras högre upp i stapeln om det behövs.
+            }
+        }
         /*
         Denna klass är en generisk abstrakt klass som representerar en generisk repository för att hantera 
         databasoperationer. 

@@ -87,6 +87,20 @@ namespace WebApi.Helpers.Repositories
                 return false;
             }
         }
+        public async Task<ProductEntity> InsertAsync(ProductEntity entity)
+        {
+            try
+            {
+                _context.Products.Add(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return null!;
+            }
+        }
         /*
           ProductRepository-klassen är en specialisering av den generiska Repository-klassen för att
           hantera ProductEntity-objekt. Det är en del av datalagret och erbjuder en samling av metoder för 
