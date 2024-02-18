@@ -1,25 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using WebApi.Helpers.Repositories;
-using WebApi.Helpers.Services;
+using System.Net;
+using WebApi.Helpers.Interfaces;
 using WebApi.Models.Dtos;
 
 namespace WebApi.Controllers
 {
-    // Använder attributet [Route] för att definiera grundläggande routen för alla åtgärder i denna kontroller.
-    // [ApiController] attributet indikerar att denna klass är en ASP.NET Core webb-API-kontroller.
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        // Privata fält för att lagra referenser till ProductRepository och ProductService.
-        // Dessa används för att hantera databasoperationer och affärslogik för produkter.
-       // private readonly ProductRepository _productRepo;
-        private readonly ProductService _productService;
-
-        // Konstruktor för ProductsController. Initialiserar fälten med de instanser som förmedlas vid instansiering.
-        // Denna beroendeinjektion möjliggör att byta ut och testa olika delar av systemet.
-        public ProductsController(ProductService productService)
+        private readonly IProductService _productService;
+        public ProductsController(IProductService productService)
         {
             _productService = productService;
         }
@@ -40,61 +32,109 @@ namespace WebApi.Controllers
                     return NotFound($"Produkt med ID {id} hittades inte.");
                 }
             }
+            catch (WebException ex)
+            {
+                var response = ex.Response as HttpWebResponse;
+                if (response != null)
+                {
+                    Console.WriteLine("HTTP Status Code: " + (int)response.StatusCode);
+                    return StatusCode((int)response.StatusCode, "Ett internt serverfel har inträffat.");
+                }
+                return StatusCode(500, "Ett internt serverfel har inträffat.");
+            }
             catch (Exception ex)
             {
-                // Logga undantaget och returnera ett serverfel
                 Debug.WriteLine($"Ett undantag inträffade: {ex.Message}");
                 return StatusCode(500, "Ett internt serverfel har inträffat.");
             }
         }
 
-        // HTTP GET metod för att hämta alla produkter, [Route("all")] definierar sub-routen för denna åtgärd.
         [Route("all")]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-            // Anropar ProductService för att hämta alla produkter och returnerar dem.
-            return Ok(await _productService.GetAllAsync());
+            try
+            {
+                var products = await _productService.GetAllAsync();
+                if (products != null) 
+                {
+                    return Ok(products);
+                }
+                else
+                {
+                    return NotFound("Inga produkter hittades.");
+                }
+            }
+            catch (WebException ex)
+            {
+                var response = ex.Response as HttpWebResponse;
+                if (response != null)
+                {
+                    Console.WriteLine("HTTP Status Code: " + (int)response.StatusCode);
+                    return StatusCode((int)response.StatusCode, "Ett fel uppstod vid hämtning av alla produkter.");
+                }
+                return StatusCode(500, "Ett internt serverfel har inträffat vid hämtning av alla produkter.");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Ett undantag inträffade: {ex.Message}");
+                return StatusCode(500, "Ett internt serverfel har inträffat vid hämtning av alla produkter.");
+            }
         }
 
-        // HTTP GET metod för att hämta en produkt baserat på dess ID. [Route("id")] definierar sub-routen för denna åtgärd.
-        //[Route("id")]
-        //[HttpGet]
-        //public async Task<IActionResult> GetByIdAsync(int id)
-        //{
-        //    // Anropar ProductService för att hämta en produkt baserat på ID och returnerar den.
-        //    return Ok(await _productService.GetAsync(x => x.Id == id));
-        //}
-
-        // En HTTP GET metod för att hämta produkter baserat på deras tagg. [Route("tag")] definierar sub-routen för denna åtgärd.
-        //[Route("tag")]
-        //[HttpGet]
-        //public async Task<IActionResult> GetByTagAsync(string tag)
-        //{
-        //    // Anropar ProductService för att hämta produkter baserat på tagg och returnerar dem.
-        //    return Ok(await _productService.GetAllAsync(x => x.Tag == tag));
-        //}
-
-        // En HTTP POST metod för att lägga till en ny produkt. [Route("add")] definierar sub-routen för denna åtgärd.
         [Route("add")]
         [HttpPost]
         public async Task<IActionResult> AddAsync(Product product)
         {
-            // Anropar ProductService för att skapa en ny produkt och returnerar den skapade produkten.
-            return Ok(await _productService.AddAsync(product));
+            try
+            {
+                var createdProduct = await _productService.AddAsync(product);
+                return Ok(createdProduct);
+            }
+            catch (WebException ex)
+            {
+                var response = ex.Response as HttpWebResponse;
+                if (response != null)
+                {
+                    Console.WriteLine("HTTP Statuskod: " + (int)response.StatusCode);
+                    return StatusCode((int)response.StatusCode, "Ett fel uppstod vid tillägg av en ny produkt.");
+                }
+                return StatusCode(500, "Ett internt serverfel har inträffat vid tillägg av en ny produkt.");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Ett undantag inträffade: {ex.Message}");
+                return StatusCode(500, "Ett internt serverfel har inträffat vid tillägg av en ny produkt.");
+            }
         }
 
-        // HTTP DELETE metod för att ta bort en produkt baserat på dess ID. [Route("delete/{id}")] definierar sub-routen för denna åtgärd.
         [Route("delete/{id}")]
         [HttpDelete]
-        public async Task<IActionResult>DeleteAsync(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
-            // Anropar ProductService för att ta bort en produkt baserat på ID och returnerar resultatet.
-            var success = await _productService.DeleteAsync(id);
-            if (success)
-                return Ok(); 
-            else
-                return NotFound(); 
+            try
+            {
+                var success = await _productService.DeleteAsync(id);
+                if (success)
+                    return Ok();
+                else
+                    return NotFound($"Produkt med ID {id} hittades inte för borttagning.");
+            }
+            catch (WebException ex)
+            {
+                var response = ex.Response as HttpWebResponse;
+                if (response != null)
+                {
+                    Console.WriteLine("HTTP Statuskod: " + (int)response.StatusCode);
+                    return StatusCode((int)response.StatusCode, "Ett fel uppstod vid försök att ta bort produkt.");
+                }
+                return StatusCode(500, "Ett internt serverfel har inträffat vid försök att ta bort produkt.");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Ett undantag inträffade: {ex.Message}");
+                return StatusCode(500, "Ett internt serverfel har inträffat vid försök att ta bort produkt.");
+            }
         }
 
         [Route("update")]
@@ -105,14 +145,13 @@ namespace WebApi.Controllers
             {
                 return BadRequest("Uppdaterad produktinformation saknas.");
             }
+            else if (product.Id != id)
+            {
+                return BadRequest("Produkt-ID stämmer inte överens med ID i förfrågan.");
+            }
 
             try
             {
-                //var existingProduct = await _productService.GetAsync(x => x.Id == product.Id);
-                //if (existingProduct == null)
-                //{
-                //    return NotFound($"Produkt med ID {id} hittades inte.");
-                //}
                 var success = await _productService.UpdateAsync(product);
                 if (success)
                 {
@@ -120,38 +159,65 @@ namespace WebApi.Controllers
                 }
                 else
                 {
-                    return StatusCode(500, "Ett fel inträffade vid uppdatering av produkten.");
+                    return NotFound($"Produkt med ID {product.Id} hittades inte.");
                 }
+            }
+            catch (WebException ex)
+            {
+                var response = ex.Response as HttpWebResponse;
+                if (response != null)
+                {
+                    Console.WriteLine("HTTP Statuskod: " + (int)response.StatusCode);
+                    return StatusCode((int)response.StatusCode, "Ett nätverksfel uppstod vid uppdatering av produkten.");
+                }
+                return StatusCode(500, "Ett nätverksfel uppstod vid uppdatering av produkten.");
             }
             catch (Exception ex)
             {
-                // Loggar undantaget
-                // Log.Error(ex, "Ett fel inträffade när produkten skulle uppdateras.");
-                return StatusCode(500, "Ett internt serverfel inträffade.");
+                Debug.WriteLine($"Ett undantag inträffade: {ex.Message}");
+                return StatusCode(500, "Ett internt serverfel inträffade vid uppdatering av produkten.");
             }
         }
+
         [Route("insert")]
-        [HttpPut]
-       public async Task<IActionResult> InsertAsync(Product product)
-{
-    try
-    {
-        // Anta att du har en repository eller tjänst som hanterar databasoperationer
-        // Du behöver implementera detta beroende på din specifika databas och struktur.
+        [HttpPost]
+        public async Task<IActionResult> InsertAsync(Product product)
+        {
+            if (product == null)
+            {
+                return BadRequest("Produktinformation saknas.");
+            }
 
-        // Exempel: Anropa en metod för att lägga till produkten i databasen
-        var result = await _productService.InsertAsync(product);
-
-        return Ok(result); // Status 200 OK om allt gick bra
+            try
+            {
+                var result = await _productService.InsertAsync(product);
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return StatusCode(500, "Kunde inte lägga till produkten.");
+                }
+            }
+            catch (WebException ex)
+            {
+                var response = ex.Response as HttpWebResponse;
+                if (response != null)
+                {
+                    Console.WriteLine("HTTP Statuskod: " + (int)response.StatusCode);
+                    return StatusCode((int)response.StatusCode, "Ett nätverksfel uppstod vid insättning av produkten.");
+                }
+                return StatusCode(500, "Ett nätverksfel uppstod vid insättning av produkten.");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Ett undantag inträffade: {ex.Message}");
+                return StatusCode(500, $"Ett internt serverfel uppstod: {ex.Message}");
+            }
+        }
     }
-    catch (Exception ex)
-    {
-        // Logga felet eller hantera det på annat sätt
-        return StatusCode(500, $"Ett fel uppstod: {ex.Message}");
-    }
-}
-    }
-}
+ }
 /*
    ProductsController-klassen är en webb-API-kontroller i en ASP.NET Core applikation.
    Den hanterar HTTP-förfrågningar relaterade till produkter. 

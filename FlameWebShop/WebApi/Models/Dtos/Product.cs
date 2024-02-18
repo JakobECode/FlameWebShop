@@ -18,6 +18,10 @@ namespace WebApi.Models.Dtos
         // Detta gör det möjligt att automatiskt konvertera en ProductEntity-instans till en Product-instans.
         public static implicit operator Product(ProductEntity entity)
         {
+            
+            if (entity == null)
+                return null!;
+
             return new Product
             {
                 Id = entity.Id,
@@ -27,7 +31,7 @@ namespace WebApi.Models.Dtos
                 StarRating = entity.StarRating,
                 ImageUrl = entity.ImageUrl,
                 CategoryId = entity.CategoryId,
-                Tag = entity.Tag!
+                Tag = entity.Tag
             };
         }
 

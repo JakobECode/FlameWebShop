@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebApi.Context;
+using WebApi.Helpers.Interfaces;
 using WebApi.Helpers.Repositories;
 using WebApi.Helpers.Services;
 
@@ -34,7 +35,7 @@ namespace WebApi
 
             #region Services
             //builder.Services.AddScoped<AuthenticationService>();
-            builder.Services.AddScoped<ProductService>();
+            builder.Services.AddScoped<IProductService,ProductService>();
             builder.Services.AddScoped<CategoryService>();
             #endregion
 
