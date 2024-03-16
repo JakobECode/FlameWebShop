@@ -4,9 +4,9 @@ using WebApi.Models.Entities;
 
 namespace WebApi.Helpers.Repositories
 {
-    public class CategoryRepository : Repository<CategoryEntity>
+    public class CategoryRepository : SqlRepository<CategoryEntity>
     {
-        public CategoryRepository(DataContext context) : base(context) 
+        public CategoryRepository(SqlContext context) : base(context) 
         {
         }
     }

@@ -182,3 +182,13 @@ C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\obj\Debug\net7.0\refint
 C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\obj\Debug\net7.0\WebApi.pdb
 C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\obj\Debug\net7.0\WebApi.genruntimeconfig.cache
 C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\obj\Debug\net7.0\ref\WebApi.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\bin\Debug\net7.0\BouncyCastle.Cryptography.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\bin\Debug\net7.0\MailKit.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\bin\Debug\net7.0\MimeKit.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\bin\Debug\net7.0\Newtonsoft.Json.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\bin\Debug\net7.0\System.Formats.Asn1.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\bin\Debug\net7.0\System.Security.Cryptography.Pkcs.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\bin\Debug\net7.0\System.Text.Encoding.CodePages.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\bin\Debug\net7.0\Twilio.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Security.Cryptography.Pkcs.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\WebApi\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Text.Encoding.CodePages.dll

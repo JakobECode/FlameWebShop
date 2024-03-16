@@ -1,155 +1,251 @@
-﻿using System.Diagnostics;
-using System.Linq.Expressions;
-using WebApi.Context;
-using WebApi.Helpers.Interfaces;
+﻿using System.Linq.Expressions;
 using WebApi.Helpers.Repositories;
 using WebApi.Models.Dtos;
 using WebApi.Models.Entities;
+using WebApi.Models.Interfaces;
+using WebApi.Models.Schemas;
 
 namespace WebApi.Helpers.Services
 {
     public class ProductService : IProductService
     {
-        private readonly DataContext _context;
         private readonly ProductRepository _productRepo;
-        public ProductService(DataContext context, ProductRepository productRepo, CategoryRepository categoryRepo )
-        {
-            _context = context;
-            _productRepo = productRepo;
-        }
-        public async Task<ProductEntity> AddAsync(Product product)
-        {
-            try
-            {
-                if (product == null)
-                {
-                    throw new ArgumentNullException(nameof(product), "Produkten får inte vara null.");
-                }
-                ProductEntity entity = product;
-                var addedEntity = await _productRepo.AddAsync(entity);
-                return addedEntity;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Ett undantag inträffade vid tillägg av produkt: {ex.Message}");
-                throw;
-            }
-        }
-        public async Task<Product> GetAsync(Expression<Func<ProductEntity, bool>> expression)
-        {
-            try
-            {
-                var entity = await _productRepo.GetAsync(expression);
-                if (entity != null)
-                {
-                    Product product = entity;
-                    return product;
-                }
-                else
-                {
-                    throw new KeyNotFoundException("Produkten hittades inte.");
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Ett undantag inträffade vid hämtning av produkt: {ex.Message}");
-                throw; 
-            }
-        }
-        public async Task<IEnumerable<Product>> GetAllAsync()
-        {
-            try
-            {
-                var result = await _productRepo.GetAllAsync();
-                var products = new List<Product>();
-                if (result != null)
-                {
-                    foreach (var entity in result)
-                    {
-                        Product product = entity; 
-                        products.Add(product);
-                    }
-                }
-                return products;
-            }
-            catch (Exception ex) { Debug.WriteLine(ex.Message); }
-            return null!;
-        }
-        public async Task<IEnumerable<Product>> GetAllAsync(Expression<Func<ProductEntity, bool>> expression)
-        {
-            try
-            {
-                var result = await _productRepo.GetAllAsync(expression); 
-                var products = new List<Product>(); 
+        private readonly ReviewRepository _reviewRepo;
+        private readonly ICategoryService _categoryService;
 
-                if (result != null)
+        public ProductService(ProductRepository productRepo, ReviewRepository reviewRepo, ICategoryService categoryService)
+        {
+            _productRepo = productRepo;
+            _reviewRepo = reviewRepo;
+            _categoryService = categoryService;
+        }
+
+        public async Task<IEnumerable<ProductDTO>> GetAllAsync()
+        {
+            try
+            {
+                var products = await _productRepo.GetAllAsync();
+                var dtos = new List<ProductDTO>();
+
+                foreach (var entity in products)
                 {
-                    foreach(var entity in result)
-                    {
-                        Product product = entity;
-                        products.Add(product);
-                    }
+                    //ProductDTO product = entity;
+                    dtos.Add(entity);
                 }
-                return products;
+
+                return dtos;
             }
-            catch (Exception ex) { Debug.WriteLine(ex.Message); }
+            catch { }
             return null!;
         }
-        public async Task<bool> DeleteAsync(int id)
+
+        public async Task<IEnumerable<ProductDTO>> GetBySalesCategoryAsync(string salesCategory)
+        {
+            try
+            {
+                var allProducts = await _productRepo.GetAllAsync();
+                var products = allProducts.Where(x => x.SalesCategory == salesCategory);
+                var dto = new List<ProductDTO>();
+
+                foreach (var entity in products)
+                {
+                    dto.Add(entity);
+                }
+
+                return dto;
+            }
+            catch { }
+            return null!;
+        }
+        public async Task<IEnumerable<ProductDTO>> GetByCategoryAsync(string category)
+        {
+            try
+            {
+                var allProducts = await _productRepo.GetAllAsync();
+                var products = allProducts.Where(x => x.Category == category);
+                var dto = new List<ProductDTO>();
+
+                foreach (var entity in products)
+                {
+                    dto.Add(entity);
+                }
+
+                return dto;
+            }
+            catch { }
+            return null!;
+        }
+
+        public async Task<ProductDTO> GetByIdAsync(Guid id)
+        {
+            try
+            {
+                var product = await _productRepo.GetAsync(x => x.Id == id);
+                ProductDTO dto = product;
+
+                return dto;
+            }
+            catch { }
+            return null!;
+        }
+
+        public async Task<IEnumerable<ProductDTO>> GetByPriceAsync(int minPrice, int maxPrice)
+        {
+            try
+            {
+                var products = await _productRepo.GetListAsync(x => x.Price >= minPrice && x.Price <= maxPrice);
+                var dto = new List<ProductDTO>();
+
+                foreach (var entity in products)
+                {
+                    dto.Add(entity);
+                }
+
+                return dto;
+            }
+            catch { }
+            return null!;
+        }
+
+        public async Task<IEnumerable<ProductDTO>> GetByNameAsync(string searchCondition)
+        {
+            try
+            {
+                Expression<Func<ProductEntity, bool>> predicate = p => p.Name.ToLower().Contains(searchCondition.ToLower());
+                var products = await _productRepo.GetListAsync(predicate);
+
+                return products.Select(p => (ProductDTO)p);
+            }
+            catch { }
+            return null!;
+        }
+
+        public async Task<bool> CreateAsync(ProductSchema schema)
+        {
+            try
+            {
+                var CategoryList = await _categoryService.CheckOrCreateAsync(schema.Category!);
+                if (CategoryList)
+                {
+                    var categoryResult = await _categoryService.CheckOrCreateAsync(schema.Category!);
+                    if (categoryResult)
+                    {
+                        ProductEntity entity = schema;
+                        await _productRepo.AddAsync(entity);
+
+                        return true;
+                    }
+                }
+            }
+            catch { }
+            return false;
+        }
+
+        public async Task<bool> UpdateAsync(ProductSchema schema)
+        {
+            try
+            {
+                ProductEntity entity = schema;
+                await _productRepo.UpdateAsync(entity);
+
+                return true;
+            }
+            catch { }
+            return false;
+        }
+
+        public async Task<bool> DeleteAsync(Guid id)
         {
             try
             {
                 var entity = await _productRepo.GetAsync(x => x.Id == id);
-                if (entity == null)
-                {
-                    return false; 
-                }
                 await _productRepo.DeleteAsync(entity);
+
                 return true;
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-                return false;
-            }
+            catch { }
+            return false;
         }
-        public async Task<bool> UpdateAsync(Product product)
-        {
-            if (product == null)
-            {
-                throw new ArgumentNullException(nameof(product));
-            }
-            try
-            {
-                var resultEntity = await _productRepo.UpdateAsync(product);
-                return resultEntity != null;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
-        public async Task<Product> InsertAsync(Product product)
+
+        public async Task<bool> UpdateRatingAsync(Guid productId)
         {
             try
             {
-                _context.Products.Add(product);
-                await _context.SaveChangesAsync();
-                return product;
+                var ratings = new List<double>();
+                var product = await _productRepo.GetAsync(p => p.Id == productId);
+                var reviews = await _reviewRepo.GetListAsync(r => r.ProductId == productId);
+
+                foreach (var review in reviews)
+                {
+                    ratings.Add(review.Rating);
+                }
+
+                double count = ratings.Count;
+                if (count > 0)
+                {
+                    product.Rating = ratings.Sum() / count;
+                    product.ReviewCount = ratings.Count;
+                    await _productRepo.UpdateAsync(product);
+
+                    return true;
+                }
             }
-            catch (Exception ex)
+            catch { }
+            return false;
+        }
+
+        public async Task<IEnumerable<ProductDTO>> GetFilteredProductsAsync(FilterSchema filter)
+        {
+
+            try
             {
-                throw new Exception("Misslyckades med att lägga till produkt.", ex);
+                var products = await _productRepo.GetAllAsync();
+                var dtos = new List<ProductDTO>();
+                var category = new List<string>();
+
+                if (!string.IsNullOrEmpty(filter.Category))
+                {
+                    category = filter.Category.Split(',').Select(t => t.Trim()).ToList();
+                }
+
+                foreach (var product in products)
+                {
+                    dtos.Add(product);
+                }
+
+                if (filter.MinPrice != null)
+                {
+                    dtos = dtos.Where(p => p.Price >= filter.MinPrice).ToList();
+                }
+                if (filter.MaxPrice != null)
+                {
+                    dtos = dtos.Where(p => p.Price <= filter.MaxPrice).ToList();
+                }
+                if (category.Any() && category.Count > 0)
+                {
+                   // dtos = dtos.Where(p => category.All(t => p.Category != null && p.Category.Any(pt => string.Equals(pt, t, StringComparison.OrdinalIgnoreCase)))).ToList();
+                    // dtos = dtos.Where(p => tags.All(t => p.Tags!.Contains(t))).ToList();
+                }
+                if (!string.IsNullOrEmpty(filter.Name))
+                {
+                    dtos = dtos.Where(p => p.Name.ToLower().Contains(filter.Name.ToLower())).ToList();
+                }
+                if (!string.IsNullOrEmpty(filter.Category))
+                {
+                    dtos = dtos.Where(p => p.Category == filter.Category).ToList();
+                }
+                if (!string.IsNullOrEmpty(filter.SalesCategory))
+                {
+                    dtos = dtos.Where(p => p.SalesCategory == filter.SalesCategory).ToList();
+                }
+
+                if (filter.Amount.HasValue)
+                    dtos = dtos.Take(filter.Amount.Value).ToList();
+
+                return dtos;
             }
+            catch { }
+            return null!;
         }
     }
 }
-/*
-  ProductService-klassen fungerar som en del av affärslogiklagret och koordinerar interaktioner 
-  mellan databasen och applikationen. 
-  Den använder ProductRepository och CategoryRepository för att utföra databasoperationer. 
-  Metoderna i denna klass hanterar skapande, hämtning och filtrering av ProductEntity-objekt, 
-  och de konverterar dessa objekt till Product-instanser som sedan kan användas i andra delar 
-  av applikationen. Asynkron programmering används för att förbättra prestanda och skalbarhet. 
-  Exceptionhantering säkerställer att eventuella fel hanteras och loggas på ett lämpligt sätt.
- */

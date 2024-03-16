@@ -172,3 +172,12 @@ C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\UnitTests\obj\Debug\net7.0\ref
 C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\UnitTests\obj\Debug\net7.0\UnitTests.pdb
 C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\UnitTests\obj\Debug\net7.0\UnitTests.genruntimeconfig.cache
 C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\UnitTests\obj\Debug\net7.0\ref\UnitTests.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\UnitTests\bin\Debug\net7.0\BouncyCastle.Cryptography.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\UnitTests\bin\Debug\net7.0\MailKit.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\UnitTests\bin\Debug\net7.0\MimeKit.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\UnitTests\bin\Debug\net7.0\System.Formats.Asn1.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\UnitTests\bin\Debug\net7.0\System.Security.Cryptography.Pkcs.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\UnitTests\bin\Debug\net7.0\System.Text.Encoding.CodePages.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\UnitTests\bin\Debug\net7.0\Twilio.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\UnitTests\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Security.Cryptography.Pkcs.dll
+C:\Users\Jakob\Desktop\FlameWebbShop\FlameWebShop\UnitTests\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Text.Encoding.CodePages.dll

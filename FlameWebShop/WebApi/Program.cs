@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebApi.Context;
-using WebApi.Helpers.Interfaces;
 using WebApi.Helpers.Repositories;
 using WebApi.Helpers.Services;
+using WebApi.Models.Interfaces;
 
 namespace WebApi
 {
@@ -30,7 +30,7 @@ namespace WebApi
             builder.Services.AddScoped<ProductRepository>();
             builder.Services.AddScoped<CategoryRepository>();
             //builder.Services.AddScoped<UserProfileRepository>();
-            builder.Services.AddScoped<CommentRepository>();
+            //builder.Services.AddScoped<CommentRepository>();
             #endregion
 
             #region Services
