@@ -97,7 +97,7 @@ namespace WebApi.Controllers
 
         [Route("CreateOrder")]
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> CreateOrder(OrderSchema schema)
         {
             if (ModelState.IsValid)
@@ -113,7 +113,7 @@ namespace WebApi.Controllers
 
         [Route("CancelOrder")]
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> CancelOrder(OrderCancelSchema schema)
         {
             if (ModelState.IsValid)
@@ -132,7 +132,7 @@ namespace WebApi.Controllers
 
         [Route("DeleteOrder/{id}")]
         [HttpDelete]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> DeleteOrder(Guid orderId)
         {
             if (ModelState.IsValid)

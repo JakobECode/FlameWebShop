@@ -52,7 +52,7 @@ namespace WebApi.Controllers
 
         [Route("AddCategory")]
         [HttpPost]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> AddCategory(CategorySchema schema)
         {
             if (ModelState.IsValid)
@@ -67,7 +67,7 @@ namespace WebApi.Controllers
 
         [Route("DeleteCategory/{id}")]
         [HttpDelete]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> DeleteCategory(Guid id)
         {
             if (ModelState.IsValid)

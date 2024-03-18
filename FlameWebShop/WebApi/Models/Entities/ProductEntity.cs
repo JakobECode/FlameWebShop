@@ -11,6 +11,7 @@ namespace WebApi.Models.Entities
 
         public string? Category { get; set; }
 
+        // Defaults to "New" if not set explicitly.
         public string? SalesCategory { get; set; } = "New";
 
         [MaxLength(100)]
@@ -38,6 +39,5 @@ namespace WebApi.Models.Entities
         [Required]
         public string Brand { get; set; } = null!;
         public double? DiscountMultiplier { get; set; }
-        public string PartitionKey { get; set; } = "Product";
     }
 }

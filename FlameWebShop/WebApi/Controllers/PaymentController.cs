@@ -6,7 +6,7 @@ using WebApi.Models.Schemas;
 
 namespace WebApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [UseApiKey]
     [Route("api/[controller]")]
     [ApiController]

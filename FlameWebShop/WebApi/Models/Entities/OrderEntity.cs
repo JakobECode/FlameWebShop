@@ -9,6 +9,5 @@
         public decimal Price { get; set; }
         public AddressEntity Address { get; set; } = null!;
         public List<OrderItemEntity> Items { get; set; } = null!;
-        public string PartitionKey { get; set; } = "Orders";
     }
 }

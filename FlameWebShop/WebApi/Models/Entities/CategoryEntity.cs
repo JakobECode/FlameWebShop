@@ -10,7 +10,5 @@ namespace WebApi.Models.Entities
 
         [Required]
         public string Name { get; set; } = null!;
-
-        public string PartitionKey { get; set; } = "Category";
     }
 }

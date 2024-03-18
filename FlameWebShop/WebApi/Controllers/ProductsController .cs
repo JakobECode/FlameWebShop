@@ -132,7 +132,7 @@ namespace WebApi.Controllers
 
         [Route("Add")]
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> AddProduct(ProductSchema schema)
         {
             if (ModelState.IsValid)
@@ -147,7 +147,7 @@ namespace WebApi.Controllers
 
         [Route("Delete/{id}")]
         [HttpDelete]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> DeleteProduct(Guid id)
         {
             if (ModelState.IsValid)
@@ -166,7 +166,7 @@ namespace WebApi.Controllers
 
         [Route("Update")]
         [HttpPut]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> UpdateProduct(ProductSchema schema)
         {
             if (ModelState.IsValid)

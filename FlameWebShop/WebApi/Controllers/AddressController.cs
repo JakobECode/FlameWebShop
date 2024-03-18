@@ -7,7 +7,7 @@ using WebApi.Models.Schemas;
 namespace WebApi.Controllers
 {
     [UseApiKey]
-    [Authorize]
+   // [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AddressController : ControllerBase

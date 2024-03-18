@@ -4,9 +4,9 @@ using WebApi.Models.Entities;
 
 namespace WebApi.Helpers.Repositories
 {
-    public class ReviewRepository : SqlRepository<ReviewEntity>
+    public class ReviewRepository : Repository<ReviewEntity>
     {
-        public ReviewRepository(SqlContext context): base(context) 
+        public ReviewRepository(DataContext context): base(context) 
         {
         }
     }

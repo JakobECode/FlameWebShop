@@ -4,9 +4,9 @@ using WebApi.Models.Entities;
 
 namespace WebApi.Helpers.Repositories
 {
-    public class ProductRepository : SqlRepository<ProductEntity>
+    public class ProductRepository : Repository<ProductEntity>
     {
-        public ProductRepository(SqlContext context) : base(context) 
+        public ProductRepository(DataContext context) : base(context) 
         {
         }
     }

@@ -22,7 +22,5 @@ namespace WebApi.Models.Entities
 
         public string? ImageUrl { get; set; }
         public DateTime CreatedDate { get; set; }
-
-        public string PartitionKey { get; set; } = "Review";
     }
 }

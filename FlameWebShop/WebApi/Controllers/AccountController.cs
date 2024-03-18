@@ -5,10 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using WebApi.Helpers.Filters;
 using WebApi.Models.Interfaces;
 using WebApi.Models.Schemas;
+using Microsoft.AspNetCore.Authentication.Google;
 
 namespace WebApi.Controllers
 {
-    [UseApiKey]
+    //[UseApiKey]
     [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
@@ -46,7 +47,7 @@ namespace WebApi.Controllers
             }
             return BadRequest("Incorrect email or password");
         }
-        [Authorize]
+        //[Authorize]
         [Route("LogOut")]
         [HttpPost]
         public async Task<IActionResult> LogOutAsync()
@@ -54,7 +55,7 @@ namespace WebApi.Controllers
             await _accountService.LogOutAsync();
             return Ok();
         }
-        [Authorize]
+       // [Authorize]
         [Route("UpdateProfile")]
         [HttpPut]
         public async Task<IActionResult> UpdateProfileAsync(UpdateUserSchema schema)
@@ -72,7 +73,7 @@ namespace WebApi.Controllers
             }
             return BadRequest("Model not valid");
         }
-        [Authorize]
+       // [Authorize]
         [Route("GetProfile")]
         [HttpGet]
         public async Task<IActionResult> GetProfile()
@@ -121,7 +122,7 @@ namespace WebApi.Controllers
         }
         [Route("ChangePassword")]
         [HttpPost]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> ChangePassword(ChangePasswordSchema schema)
         {
             if (ModelState.IsValid)
@@ -138,7 +139,7 @@ namespace WebApi.Controllers
         }
         [Route("DeleteById/{id}")]
         [HttpDelete]
-        [Authorize]
+      //  [Authorize]
         public async Task<IActionResult> DeleteAccountById(string id)
         {
             var result = await _accountService.DeleteUser(id);
@@ -150,7 +151,7 @@ namespace WebApi.Controllers
         }
         [Route("RemoveAccount")]
         [HttpDelete]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> RemoveAccount()
         {
             var userName = HttpContext.User.Identity!.Name;
@@ -166,79 +167,45 @@ namespace WebApi.Controllers
 
         #region External Login
 
-        //[Route("Facebook")]
-        //[HttpGet]
-        //public async Task Facebook() => await HttpContext.ChallengeAsync(
-        //    FacebookDefaults.AuthenticationScheme,
-        //    new AuthenticationProperties { RedirectUri = Url.Action("ExternalAuthFacebook") }
-        //);
+        [Route("Google")]
+        [HttpGet]
+        public async Task Google() => await HttpContext.ChallengeAsync(
+            GoogleDefaults.AuthenticationScheme,
+            new AuthenticationProperties { RedirectUri = Url.Action("ExternalAuthGoogle") }
+        );
 
-        //[Route("Google")]
-        //[HttpGet]
-        //public async Task Google() => await HttpContext.ChallengeAsync(
-        //    GoogleDefaults.AuthenticationScheme,
-        //    new AuthenticationProperties { RedirectUri = Url.Action("ExternalAuthGoogle") }
-        //);
+        [Route("ExternalGoogle")]
+        [HttpGet]
+        public async Task<IActionResult> ExternalAuthGoogle()
+        {
+            var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
 
-        //[Route("ExternalFacebook")]
-        //[HttpGet]
-        //public async Task<IActionResult> ExternalAuthFacebook()
-        //{
-        //    var result = await HttpContext.AuthenticateAsync(FacebookDefaults.AuthenticationScheme);
+            if (result.Succeeded)
+            {
+                ExternalLoginInfo externalUser = new ExternalLoginInfo
+                    (
+                        result.Principal,
+                        result.Principal.Identity!.AuthenticationType!,
+                        result.Principal.Claims.First().ToString(),
+                        result.Principal.Identity.AuthenticationType!
+                    );
 
-        //    if (result.Succeeded)
-        //    {
-        //        ExternalLoginInfo externalUser = new ExternalLoginInfo
-        //            (
-        //                result.Principal,
-        //                result.Principal.Identity!.AuthenticationType!,
-        //                result.Principal.Claims.First().ToString(),
-        //                result.Principal.Identity.AuthenticationType!
-        //            );
+                var token = await _accountService.LogInExternalAsync(externalUser);
 
-        //        var token = await _accountService.LogInExternalAsync(externalUser);
+                if (!string.IsNullOrEmpty(token))
+                {
+                    return Ok(token);
+                }
+            }
 
-        //        if (!string.IsNullOrEmpty(token))
-        //        {
-        //            return Ok(token);
-        //        }
-        //    }
-
-        //    return BadRequest("Failiure to authenticate.");
-        //}
-
-        //[Route("ExternalGoogle")]
-        //[HttpGet]
-        //public async Task<IActionResult> ExternalAuthGoogle()
-        //{
-        //    var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
-
-        //    if (result.Succeeded)
-        //    {
-        //        ExternalLoginInfo externalUser = new ExternalLoginInfo
-        //            (
-        //                result.Principal,
-        //                result.Principal.Identity!.AuthenticationType!,
-        //                result.Principal.Claims.First().ToString(),
-        //                result.Principal.Identity.AuthenticationType!
-        //            );
-
-        //        var token = await _accountService.LogInExternalAsync(externalUser);
-
-        //        if (!string.IsNullOrEmpty(token))
-        //        {
-        //            return Ok(token);
-        //        }
-        //    }
-
-        //    return BadRequest("Failiure to authenticate.");
-        //}
+            return BadRequest("Failiure to authenticate.");
+        }
 
         #endregion
 
         [Route("ConfirmPhone")]
         [HttpPost]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> ConfirmPhone(ConfirmPhoneSchema schema)
         {
             if (ModelState.IsValid)
@@ -259,7 +226,7 @@ namespace WebApi.Controllers
         }
         [Route("VerifyPhone")]
         [HttpPost]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> VerifyPhone()
         {
             if (ModelState.IsValid)

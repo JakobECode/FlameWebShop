@@ -52,7 +52,7 @@ namespace WebApi.Controllers
 
         [Route("AddReview")]
         [HttpPost]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> AddReview(ReviewSchema schema)
         {
             if (ModelState.IsValid)

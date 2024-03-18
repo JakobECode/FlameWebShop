@@ -4,9 +4,9 @@ using WebApi.Models.Entities;
 
 namespace WebApi.Helpers.Repositories
 {
-    public class OrderRepository : SqlRepository<OrderEntity>
+    public class OrderRepository : Repository<OrderEntity>
     {
-        public OrderRepository(SqlContext context) : base(context) 
+        public OrderRepository(DataContext context) : base(context) 
         {
         }
     }

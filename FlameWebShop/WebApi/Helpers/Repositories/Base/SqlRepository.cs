@@ -6,9 +6,9 @@ namespace WebApi.Helpers.Repositories.Base
 {
     public abstract class SqlRepository<TEntity> where TEntity : class
     {
-        private readonly SqlContext _context;
+        private readonly DataContext _context;
 
-        public SqlRepository(SqlContext context)
+        public SqlRepository(DataContext context)
         {
             _context = context;
         }

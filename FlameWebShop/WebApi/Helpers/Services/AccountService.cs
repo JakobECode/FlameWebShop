@@ -145,22 +145,10 @@ namespace WebApi.Helpers.Services
                         };
                         await _userProfileRepo.AddAsync(newUser);
                     }
-                    else if (externalUser.LoginProvider == "Facebook")
-                    {
-                        UserProfileEntity newUser = new UserProfileEntity
-                        {
-                            FirstName = externalUser.Principal.Claims.ToArray()[3].Value,
-                            LastName = externalUser.Principal.Claims.ToArray()[4].Value,
-                            UserId = newIdentityUser!.Id
-                        };
-                        await _userProfileRepo.AddAsync(newUser);
-                    }
                     else
                     {
                         throw new Exception();
                     }
-
-
 
                     // Add the external login to the new identity
                     var addLoginResult = await _userManager.AddLoginAsync(newIdentityUser, externalUser);
@@ -183,16 +171,12 @@ namespace WebApi.Helpers.Services
                         return _jwt.GenerateToken(claimsIdentity, DateTime.Now.AddHours(1));
                     }
                 }
-
                 return string.Empty; // Failed to create and sign in
             }
         }
-
         public async Task LogOutAsync()
         {
             await _signInManager.SignOutAsync();
-
-
         }
         public async Task<UserProfileDTO> ReturnProfileAsync(string Id)
         {
@@ -219,7 +203,6 @@ namespace WebApi.Helpers.Services
             {
                 dto.ImageUrl = profile.ImageUrl;
             }
-
             return dto;
         }
 
@@ -241,7 +224,6 @@ namespace WebApi.Helpers.Services
                     userProfile.ImageUrl = schema.ImageUrl;
                 }
 
-
                 var identityResult = await _userManager.UpdateAsync(identityUser);
                 var profileResult = await _userProfileRepo.UpdateAsync(userProfile);
 
@@ -252,8 +234,6 @@ namespace WebApi.Helpers.Services
                 }
             }
             catch { }
-
-
             return null!;
         }
         public async Task<string> GetUserIdAsync(string userName)
@@ -312,7 +292,6 @@ namespace WebApi.Helpers.Services
                     return null!;
 
                 return await ReturnProfileAsync(identityUser.Id);
-
             }
             catch { }
 

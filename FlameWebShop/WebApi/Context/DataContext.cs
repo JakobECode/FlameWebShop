@@ -17,6 +17,11 @@ namespace WebApi.Context
         DbSet<AddressItemEntity> AddressItems { get; set; }
         DbSet<CreditCardEntity> CreditCardEntities { get; set; }
         DbSet<UserProfileCreditCardEntity> UserProfileCreditCards { get; set; }
+        DbSet<ProductEntity> Products { get; set; }
+        DbSet<CategoryEntity> Categories { get; set; }
+        DbSet<ReviewEntity> Reviews { get; set; }
+        DbSet<OrderEntity> Orders { get; set; }
+
     }
 }
 
