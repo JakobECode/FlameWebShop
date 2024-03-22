@@ -1,3 +1,5 @@
 FlameWebShop/.vs
-FlameWebShop\WebApi\obj\*
-FlameWebShop\WebApi\bin\*
+FlameWebShop/WebApi/obj/*
+FlameWebShop/WebApi/bin/*
+FlameWebShop/UnitTests/obj/*
+FlameWebShop/UnitTests/bin/*
