@@ -4,9 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebApi.Context;
-using WebApi.Helpers.Interfaces;
+using WebApi.Helpers.Jwt;
 using WebApi.Helpers.Repositories;
 using WebApi.Helpers.Services;
+using WebApi.Models.Email;
+using WebApi.Models.Interfaces;
+
 
 namespace WebApi
 {
@@ -17,89 +20,119 @@ namespace WebApi
             var builder = WebApplication.CreateBuilder(args);
 
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddNewtonsoftJson(options =>
+            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             #region DbContexts
             builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("DBFlameShopCS")));
-            //builder.Services.AddDbContext<IdentityContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("DBFlameIdentity")));
+            #endregion
+
+            #region EmailConfig
+            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection(nameof(MailSettings)));
+            builder.Services.AddScoped<IMailService, MailService>();
+            #endregion
+
+            #region SmsConfig
+            builder.Services.AddScoped<ISmsService, SmsService>();
+            #endregion
+
+            #region Helpers
+            builder.Services.AddScoped<JwtToken>();
+            builder.Services.AddScoped<IAccountService, AccountService>();
+            builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IAddressService, AddressService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IReviewService, ReviewService>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
+
             #endregion
 
             #region Repositories
+            builder.Services.AddScoped<UserProfileRepository>();
             builder.Services.AddScoped<ProductRepository>();
             builder.Services.AddScoped<CategoryRepository>();
-            //builder.Services.AddScoped<UserProfileRepository>();
-            builder.Services.AddScoped<CommentRepository>();
+            builder.Services.AddScoped<AddressRepository>();
+            builder.Services.AddScoped<AddressItemRepository>();
+            builder.Services.AddScoped<UserProfileAddressItemRepository>();
+            builder.Services.AddScoped<ReviewRepository>();
+            builder.Services.AddScoped<CreditCardRepository>();
+            builder.Services.AddScoped<UserProfileCreditCardRepository>();
+            builder.Services.AddScoped<OrderRepository>();
             #endregion
 
-            #region Services
-            //builder.Services.AddScoped<AuthenticationService>();
-            builder.Services.AddScoped<IProductService,ProductService>();
-            builder.Services.AddScoped<CategoryService>();
+            #region Identity
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>(x =>
+            {
+                x.Password.RequiredLength = 8;
+                x.SignIn.RequireConfirmedAccount = false;
+                x.User.RequireUniqueEmail = true;
+            })
+            .AddEntityFrameworkStores<DataContext>()
+            .AddDefaultTokenProviders();
+
+
+            builder.Services.Configure<DataProtectionTokenProviderOptions>(x =>
+            {
+                x.TokenLifespan = TimeSpan.FromHours(10);
+            });
             #endregion
 
             #region Authentication
-            // Lägger till och konfigurerar ASP.NET Core Identity i tjänstesamlingen.
-            //builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            //builder.Services.AddAuthentication(x =>
             //{
-            //    // Konfigurerar Identity för att kräva att varje användare har en unik e-postadress.
-            //    options.User.RequireUniqueEmail = true; })
-            //    .AddEntityFrameworkStores<IdentityContext>()// Specifierar att Entity Framework ska användas för att lagra identitetsdata.
-            //    .AddDefaultTokenProviders();// Lägger till standardtoken-leverantörer för saker som återställning av lösenord.
+            //    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //}).AddJwtBearer(x =>
+            //{
+            //    x.Events = new JwtBearerEvents
+            //    {
+            //        OnTokenValidated = context =>
+            //        {
+            //            if (string.IsNullOrEmpty(context?.Principal?.FindFirst("id")?.Value) || string.IsNullOrEmpty(context?.Principal?.Identity?.Name))
+            //                context?.Fail("Unauthorized");
 
-            // Lägger till och konfigurerar autentiseringstjänster för applikationen.
-            builder.Services.AddAuthentication(x =>
-            {
-                // Anger JWT Bearer som standardautentiseringsschema.
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //            return Task.CompletedTask;
+            //        }
+            //    };
 
-            }).AddJwtBearer(x => // Lägger till JWT Bearer som autentiseringsmetod.
-            {
-                // Konfigurerar händelser för JWT Bearer.
-                x.Events = new JwtBearerEvents
-                {
-                    // Händelse som triggas när ett JWT-tokens giltighet har bekräftats.
-                    OnTokenValidated = context =>
-                    {
-                        return Task.CompletedTask;
-                    }
-                };
+            //    x.RequireHttpsMetadata = true;
+            //    x.SaveToken = true;
+            //    x.TokenValidationParameters = new TokenValidationParameters
+            //    {
+            //        ValidateIssuer = true,
+            //        ValidIssuer = builder.Configuration["TokenIssuer"],
+            //        ValidateAudience = true,
+            //        ValidAudience = builder.Configuration["TokenAudience"],
+            //        ValidateLifetime = true,
+            //        ValidateIssuerSigningKey = true,
+            //        IssuerSigningKey = new SymmetricSecurityKey(
+            //            Encoding.UTF8.GetBytes(builder.Configuration["TokenSecretKey"]!))
+            //    };
+            //});
+            #endregion
 
-                // Konfigurerar JWT Bearer inställningar.
-                x.RequireHttpsMetadata = true; // Kräver HTTPS för att skicka metadata.
-                x.SaveToken = true; // Anger att token ska sparas efter autentisering.
-                x.TokenValidationParameters = new TokenValidationParameters // Definierar hur tokens ska valideras.
-                {
-                    ValidateIssuer = true, // Validerar utfärdaren av token.
-                    // Hämtar och validerar utfärdaren från konfigurationen.
-                    ValidIssuer = builder.Configuration.GetSection("TokenValidation").GetValue<string>("Issuer")!,
-                    ValidateAudience = true,  // Validerar mottagaren av token.
-                    // Hämtar och validerar mottagaren från konfigurationen.
-                    ValidAudience = builder.Configuration.GetSection("TokenValidation").GetValue<string>("Audience")!,
-                    ValidateLifetime = true,// Validerar tokenens giltighetstid.
-                    ValidateIssuerSigningKey = true,  // Validerar nyckeln som används för att signera token.
-                    IssuerSigningKey = new SymmetricSecurityKey( // Skapar en säkerhetsnyckel baserad på en hemlig nyckel från konfigurationen.
-                        Encoding.UTF8.GetBytes(builder.Configuration.GetSection("TokenValidation").GetValue<string>("SecretKey")!))
-                };
-            });
-            /*
-                I den här kodsnutten konfigureras två viktiga aspekter av säkerheten i en ASP.NET Core applikation:
-                identitetshantering och JWT-baserad autentisering. Först läggs ASP.NET Core Identity till med 
-                konfiguration för unika e-postadresser och användning av Entity Framework för att lagra identitetsdata. 
-                Därefter ställs autentiseringen in för att använda JWT-tokens, inklusive konfiguration för validering
-                av dessa tokens, såsom att verifiera utfärdare, mottagare och signatur
-            */
+            #region External Auth
+
+            //builder.Services.AddAuthentication()
+            //    .AddGoogle(x =>
+            //    {
+            //        x.ClientId = builder.Configuration["GoogleClientId"]!;
+            //        x.ClientSecret = builder.Configuration["GoogleClientSecret"]!;
+            //    });
 
             #endregion
 
             var app = builder.Build();
+
             app.UseCors(x => x.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
             app.UseSwagger();
             app.UseSwaggerUI();
             app.UseHttpsRedirection();
-            app.UseAuthorization();
+            //app.UseAuthentication();
+            //app.UseAuthorization();
             app.MapControllers();
             app.Run();
         }

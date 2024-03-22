@@ -1,0 +1,42 @@
+﻿using WebApi.Models.Interfaces;
+using WebApi.Models.Sms;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
+using Twilio.Types;
+
+namespace WebApi.Helpers.Services
+{
+    public class SmsService : ISmsService
+    {
+        private readonly IConfiguration _configuration;
+
+        public SmsService(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+        public async Task<bool> SendSmsAsync(string phoneNo, string smsBody)
+        {
+            try
+            {
+                var accountSid = _configuration["PhoneAccountSID"];
+                var authToken = _configuration["PhoneAuthToken"];
+                TwilioClient.Init(accountSid, authToken);
+
+                var messageOptions = new CreateMessageOptions(
+                    new PhoneNumber(phoneNo));
+                messageOptions.From = _configuration["PhoneFromNumber"];
+                messageOptions.Body = smsBody;
+
+                var message = await MessageResource.CreateAsync(messageOptions);
+                if (message != null)
+                {
+                    return true;
+                }
+
+            }
+            catch { }
+            return false;
+        }
+    }
+}

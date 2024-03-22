@@ -5,6 +5,7 @@ using WebApi.Controllers;
 using WebApi.Helpers.Interfaces;
 using WebApi.Models.Dtos;
 using WebApi.Models.Entities;
+using WebApi.Models.Interfaces;
 
 namespace UnitTests
 {
@@ -16,7 +17,7 @@ namespace UnitTests
         {
             // Arrange
             var mockService = new Mock<IProductService>();
-            var testProduct = new Product
+            var testProduct = new ProductDTO
             {
                 Id = 1,
                 Title = "Testprodukt",
@@ -36,7 +37,7 @@ namespace UnitTests
 
             // Assert
             var actionResult = Assert.IsType<OkObjectResult>(result);
-            var product = Assert.IsType<Product>(actionResult.Value);
+            var product = Assert.IsType<ProductDTO>(actionResult.Value);
 
             Assert.Equal(1, product.Id);
             Assert.Equal("Testprodukt", product.Title);
