@@ -23,9 +23,9 @@ namespace WebApi.Models.Entities
         public ICollection<UserProfileAddressItemEntity> UserProfileAddressItems { get; set; } = new HashSet<UserProfileAddressItemEntity>();
 
 
-        public static implicit operator AddressItemDTO(AddressItemEntity entity)
+        public static implicit operator AddressItemDto(AddressItemEntity entity)
         {
-            return new AddressItemDTO
+            return new AddressItemDto
             {
                 Id = entity.Id,
                 Title = entity.Title,

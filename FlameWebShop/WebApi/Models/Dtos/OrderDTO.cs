@@ -2,18 +2,18 @@
 
 namespace WebApi.Models.Dtos
 {
-    public class OrderDTO
+    public class OrderDto
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public DateTime OrderDate { get; set; }
         public string? OrderStatus { get; set; }
         public AddressEntity? Address { get; set; }
         public decimal Price { get; set; }
         public List<OrderItemEntity> Items { get; set; } = null!;
 
-        public static implicit operator OrderDTO(OrderEntity entity)
+        public static implicit operator OrderDto(OrderEntity entity)
         {
-            return new OrderDTO
+            return new OrderDto
             {
                 Id = entity.Id,
                 OrderDate = entity.OrderDate,

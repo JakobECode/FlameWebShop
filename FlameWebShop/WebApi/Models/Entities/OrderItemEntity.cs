@@ -2,8 +2,8 @@
 {
     public class OrderItemEntity
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
-        public Guid ProductId { get; set; }
+        public int Id { get; set; } 
+        public int ProductId { get; set; }
         public string ProductName { get; set; } = null!;
         public double UnitPrice { get; set; }
         public string? ImageUrl { get; set; }

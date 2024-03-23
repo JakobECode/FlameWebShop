@@ -1,6 +1,6 @@
 ﻿namespace WebApi.Models.Dtos
 {
-    public class CreditCardDTO
+    public class CreditCardDto
     {
         public int Id { get; set; }
         public string NameOnCard { get; set; } = null!;

@@ -2,11 +2,11 @@
 
 namespace WebApi.Models.Dtos
 {
-    public class ReviewDTO
+    public class ReviewDto
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
-        public Guid ProductId { get; set; }
+        public int ProductId { get; set; }
 
         public string Name { get; set; } = null!;
 
@@ -16,9 +16,9 @@ namespace WebApi.Models.Dtos
         public string? ImageUrl { get; set; }
         public DateTime CreatedDate { get; set; }
 
-        public static implicit operator ReviewDTO(ReviewEntity entity)
+        public static implicit operator ReviewDto(ReviewEntity entity)
         {
-            return new ReviewDTO
+            return new ReviewDto
             {
                 Id = entity.Id,
                 ProductId = entity.ProductId,

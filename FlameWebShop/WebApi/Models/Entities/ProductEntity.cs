@@ -7,12 +7,9 @@ namespace WebApi.Models.Entities
     {
         [Key]
         [Required]
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public int Id { get; set; } 
 
         public string? Category { get; set; }
-
-        // Defaults to "New" if not set explicitly.
-        public string? SalesCategory { get; set; } = "New";
 
         [MaxLength(100)]
         [Required]
@@ -29,15 +26,14 @@ namespace WebApi.Models.Entities
         [Required]
         public string Description { get; set; } = null!;
 
-        public double Rating { get; set; }
+        [Range(0, 5)]
+        public double Rating { get; set; } = 0;
 
         public int ReviewCount { get; set; }
 
         [Required]
         public DateTime CreatedDate { get; set; } = DateTime.Now;
-
-        [Required]
-        public string Brand { get; set; } = null!;
+        public bool Discount { get; set; }
         public double? DiscountMultiplier { get; set; }
     }
 }

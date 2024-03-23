@@ -6,9 +6,9 @@ namespace WebApi.Models.Entities
     {
         [Key]
         [Required]
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public int Id { get; set; } 
 
-        public Guid ProductId { get; set; }
+        public int ProductId { get; set; }
         public string UserId { get; set; } = null!;
 
         [Required]
