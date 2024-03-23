@@ -12,7 +12,6 @@ namespace WebApi.Models.Schemas
         {
             return new CategoryEntity
             {
-                Id = Guid.NewGuid(),
                 Name = schema.Name
             };
         }

@@ -2,6 +2,6 @@
 {
     public class OrderCancelSchema
     {
-        public Guid OrderId { get; set; }
+        public int OrderId { get; set; }
     }
 }

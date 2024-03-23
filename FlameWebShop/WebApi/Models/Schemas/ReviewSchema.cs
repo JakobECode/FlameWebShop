@@ -5,7 +5,7 @@ namespace WebApi.Models.Schemas
 {
     public class ReviewSchema
     {
-        public Guid ProductId { get; set; }
+        public int ProductId { get; set; }
 
         [Required]
         public string Comment { get; set; } = null!;
@@ -17,7 +17,6 @@ namespace WebApi.Models.Schemas
             DateTime now = DateTime.Now;
             return new ReviewEntity
             {
-                Id = Guid.NewGuid(),
                 ProductId = schema.ProductId,
                 Comment = schema.Comment,
                 Rating = schema.Rating,

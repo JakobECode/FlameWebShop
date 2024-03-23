@@ -20,29 +20,15 @@ namespace WebApi.Models.Schemas
         [MinLength(8)]
         [RegularExpression(@"^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,}$")]
         public string Password { get; set; } = null!;
-        [RegularExpression(@"^\+\d{1,3}\d{9}$", ErrorMessage = "Not a valid phonenumber")]
-        public string? PhoneNumber { get; set; }
         public string RoleName { get; set; } = "user";
 
         public static implicit operator IdentityUser(RegisterAccountSchema schema)
         {
-            if (schema.PhoneNumber == null || schema.PhoneNumber == "")
+            return new IdentityUser
             {
-                return new IdentityUser
-                {
-                    UserName = schema.Email,
-                    Email = schema.Email,
-                };
-            }
-            else
-            {
-                return new IdentityUser
-                {
-                    UserName = schema.Email,
-                    Email = schema.Email,
-                    PhoneNumber = schema.PhoneNumber,
-                };
-            }
+                UserName = schema.Email,
+                Email = schema.Email,
+            };
         }
         public static implicit operator UserProfileEntity(RegisterAccountSchema schema)
         {
