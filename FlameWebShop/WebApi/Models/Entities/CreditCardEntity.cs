@@ -26,9 +26,9 @@ namespace WebApi.Models.Entities
 
         public ICollection<UserProfileCreditCardEntity> UserProfileCreditCards { get; set; } = new HashSet<UserProfileCreditCardEntity>();
 
-        public static implicit operator CreditCardDTO(CreditCardEntity entity)
+        public static implicit operator CreditCardDto(CreditCardEntity entity)
         {
-            return new CreditCardDTO
+            return new CreditCardDto
             {
                 Id = entity.Id,
                 NameOnCard = entity.NameOnCard,

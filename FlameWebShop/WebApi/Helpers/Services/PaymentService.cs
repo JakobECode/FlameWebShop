@@ -20,7 +20,7 @@ namespace WebApi.Helpers.Services
             _userProfileCreditCardRepo = userProfileCreditCardRepo;
         }
 
-        public async Task<IEnumerable<CreditCardDTO>> GetUserCreditCardsAsync(string userName)
+        public async Task<IEnumerable<CreditCardDto>> GetUserCreditCardsAsync(string userName)
         {
             try
             {
@@ -28,7 +28,7 @@ namespace WebApi.Helpers.Services
                 var result = await _userProfileCreditCardRepo.GetListAsync(x => x.UserProfileId == user!.Id);
                 if (result != null)
                 {
-                    List<CreditCardDTO> creditCards = new List<CreditCardDTO>();
+                    List<CreditCardDto> creditCards = new List<CreditCardDto>();
                     foreach (var item in result)
                     {
                         var card = await _creditCardRepo.GetAsync(x => x.Id == item.CreditCardId);

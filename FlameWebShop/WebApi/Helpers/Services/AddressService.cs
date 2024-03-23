@@ -24,7 +24,7 @@ namespace WebApi.Helpers.Services
             _userProfileRepo = userProfileRepo;
         }
 
-        public async Task<List<AddressItemDTO>> GetUserAddressesAsync(string userName)
+        public async Task<List<AddressItemDto>> GetUserAddressesAsync(string userName)
         {
             try
             {
@@ -33,11 +33,11 @@ namespace WebApi.Helpers.Services
                 if (user != null)
                 {
                     var userProfileAddressItemsList = await _userProfileAddressItemRepo.GetListAsync(x => x.UserProfileId == user.Id);
-                    List<AddressItemDTO> addressItems = new List<AddressItemDTO>();
+                    List<AddressItemDto> addressItems = new List<AddressItemDto>();
 
                     foreach (var item in userProfileAddressItemsList)
                     {
-                        AddressItemDTO dto = await _addressItemRepo.GetFullAddressItemAsync(x => x.Id == item.AddressItemId);
+                        AddressItemDto dto = await _addressItemRepo.GetFullAddressItemAsync(x => x.Id == item.AddressItemId);
                         addressItems.Add(dto);
                     }
 

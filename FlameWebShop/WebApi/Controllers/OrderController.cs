@@ -40,7 +40,7 @@ namespace WebApi.Controllers
 
         [Route("GetByOrderId/{id}")]
         [HttpGet]
-        public async Task<IActionResult> GetByOrderId(Guid orderId)
+        public async Task<IActionResult> GetByOrderId(int orderId)
         {
             if (ModelState.IsValid)
             {
@@ -79,7 +79,7 @@ namespace WebApi.Controllers
 
         [Route("GetByUserId/{id}")]
         [HttpGet]
-        public async Task<IActionResult> GetByUserId(Guid Id)
+        public async Task<IActionResult> GetByUserId(int Id)
         {
             if (ModelState.IsValid)
             {
@@ -133,7 +133,7 @@ namespace WebApi.Controllers
         [Route("DeleteOrder/{id}")]
         [HttpDelete]
         //[Authorize]
-        public async Task<IActionResult> DeleteOrder(Guid orderId)
+        public async Task<IActionResult> DeleteOrder(int orderId)
         {
             if (ModelState.IsValid)
             {

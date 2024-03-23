@@ -27,13 +27,13 @@ namespace WebApi.Helpers.Services
             _productRepo = productRepo;
         }
 
-        public async Task<IEnumerable<OrderDTO>> GetAllOrdersAsync()
+        public async Task<IEnumerable<OrderDto>> GetAllOrdersAsync()
         {
             try
             {
                 var currentDate = DateTime.Now;
                 var orders = await _orderRepo.GetAllAsync();
-                var dtos = new List<OrderDTO>();
+                var dtos = new List<OrderDto>();
 
                 foreach (var entity in orders)
                 {
@@ -64,7 +64,7 @@ namespace WebApi.Helpers.Services
             return null!;
         }
 
-        public async Task<OrderDTO> GetByOrderIdAsync(Guid orderId)
+        public async Task<OrderDto> GetByOrderIdAsync(int orderId)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace WebApi.Helpers.Services
                     await _orderRepo.UpdateAsync(order);
                 }
 
-                OrderDTO dto = order;
+                OrderDto dto = order;
 
                 return dto;
             }
@@ -97,16 +97,16 @@ namespace WebApi.Helpers.Services
             return null!;
         }
 
-        public async Task<IEnumerable<OrderDTO>> GetBySignedInUser(string userEmail)
+        public async Task<IEnumerable<OrderDto>> GetBySignedInUser(string userEmail)
         {
             try
             {
                 var user = await _userManager.FindByEmailAsync(userEmail);
-                var userId = Guid.Parse(user!.Id);
+                var userId = int.Parse(user!.Id);
 
                 var orders = await _orderRepo.GetListAsync(x => x.UserId == userId);
                 var currentDate = DateTime.Now;
-                var dtos = new List<OrderDTO>();
+                var dtos = new List<OrderDto>();
 
                 foreach (var item in orders)
                 {
@@ -137,13 +137,13 @@ namespace WebApi.Helpers.Services
             return null!;
         }
 
-        public async Task<IEnumerable<OrderDTO>> GetByUserIdAsync(Guid userId)
+        public async Task<IEnumerable<OrderDto>> GetByUserIdAsync(int userId)
         {
             try
             {
                 var orders = await _orderRepo.GetListAsync(x => x.UserId == userId);
                 var currentDate = DateTime.Now;
-                var dtos = new List<OrderDTO>();
+                var dtos = new List<OrderDto>();
 
                 foreach (var item in orders)
                 {
@@ -204,7 +204,7 @@ namespace WebApi.Helpers.Services
                         OrderDate = DateTime.Now,
                         OrderStatus = "Pending",
                         Items = new List<OrderItemEntity>(),
-                        UserId = Guid.Parse(user!.Id),
+                        UserId = int.Parse(user!.Id),
                         Address = address,
                         Price = schema.Price
                     };
@@ -239,7 +239,7 @@ namespace WebApi.Helpers.Services
             return false;
         }
 
-        public async Task<bool> DeleteOrder(Guid orderId)
+        public async Task<bool> DeleteOrder(int orderId)
         {
             try
             {

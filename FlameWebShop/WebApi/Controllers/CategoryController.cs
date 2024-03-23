@@ -36,7 +36,7 @@ namespace WebApi.Controllers
 
         [Route("GetCategoryById")]
         [HttpGet]
-        public async Task<IActionResult> GetById(Guid id)
+        public async Task<IActionResult> GetById(int id)
         {
             if (ModelState.IsValid)
             {
@@ -68,7 +68,7 @@ namespace WebApi.Controllers
         [Route("DeleteCategory/{id}")]
         [HttpDelete]
         //[Authorize]
-        public async Task<IActionResult> DeleteCategory(Guid id)
+        public async Task<IActionResult> DeleteCategory(int id)
         {
             if (ModelState.IsValid)
             {

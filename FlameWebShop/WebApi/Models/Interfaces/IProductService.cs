@@ -5,16 +5,14 @@ namespace WebApi.Models.Interfaces
 {
     public interface IProductService
     {
+        Task<IEnumerable<ProductDto>> GetAllAsync();
+        Task<IEnumerable<ProductDto>> GetByCategoryAsync(string category);
+        Task<ProductDto> GetByIdAsync(int id);
+        Task<IEnumerable<ProductDto>> GetByPriceAsync(int minPrice, int maxPrice);
+        Task<IEnumerable<ProductDto>> GetByNameAsync(string searchCondition);
         Task<bool> CreateAsync(ProductSchema schema);
-        Task<bool> DeleteAsync(Guid id);
-        Task<IEnumerable<ProductDTO>> GetAllAsync();
-        Task<IEnumerable<ProductDTO>> GetByCategoryAsync(string category);
-        Task<ProductDTO> GetByIdAsync(Guid id);
-        Task<IEnumerable<ProductDTO>> GetByNameAsync(string searchCondition);
-        Task<IEnumerable<ProductDTO>> GetByPriceAsync(int minPrice, int maxPrice);
-        Task<IEnumerable<ProductDTO>> GetBySalesCategoryAsync(string salesCategory);
-        Task<IEnumerable<ProductDTO>> GetFilteredProductsAsync(FilterSchema filter);
         Task<bool> UpdateAsync(ProductSchema schema);
-        Task<bool> UpdateRatingAsync(Guid productId);
+        Task<bool> DeleteAsync(int id);
+        Task<bool> UpdateRatingAsync(int productId);
     }
 }

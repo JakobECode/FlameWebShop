@@ -15,12 +15,12 @@ namespace WebApi.Helpers.Services
             _categoryRepo = categoryRepo;
         }
 
-        public async Task<IEnumerable<CategoryDTO>> GetAllAsync()
+        public async Task<IEnumerable<CategoryDto>> GetAllAsync()
         {
             try
             {
                 var categories = await _categoryRepo.GetAllAsync();
-                var dtos = new List<CategoryDTO>();
+                var dtos = new List<CategoryDto>();
 
                 foreach (var entity in categories)
                 {
@@ -33,12 +33,12 @@ namespace WebApi.Helpers.Services
             return null!;
         }
 
-        public async Task<CategoryDTO> GetByIdAsync(Guid id)
+        public async Task<CategoryDto> GetByIdAsync(int id)
         {
             try
             {
                 var category = await _categoryRepo.GetAsync(x => x.Id == id);
-                CategoryDTO dto = category;
+                CategoryDto dto = category;
 
                 return dto;
             }
@@ -59,7 +59,7 @@ namespace WebApi.Helpers.Services
             return false;
         }
 
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task<bool> DeleteAsync(int id)
         {
             try
             {
@@ -80,7 +80,6 @@ namespace WebApi.Helpers.Services
                 {
                     var entity = new CategoryEntity()
                     {
-                        Id = Guid.NewGuid(),
                         Name = category,
                     };
                     await _categoryRepo.AddAsync(entity);

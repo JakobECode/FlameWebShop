@@ -5,11 +5,10 @@ namespace WebApi.Models.Interfaces
 {
     public interface ICategoryService
     {
+        Task<IEnumerable<CategoryDto>> GetAllAsync();
+        Task<CategoryDto> GetByIdAsync(int id);
         Task<bool> CreateAsync(CategorySchema schema);
-        Task<bool> DeleteAsync(Guid id);
-        Task<IEnumerable<CategoryDTO>> GetAllAsync();
-        Task<CategoryDTO> GetByIdAsync(Guid id);
+        Task<bool> DeleteAsync(int id);
         Task<bool> CheckOrCreateAsync(string category);
-
     }
 }

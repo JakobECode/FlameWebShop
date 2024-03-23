@@ -20,12 +20,12 @@ namespace WebApi.Helpers.Services
             _categoryService = categoryService;
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetAllAsync()
+        public async Task<IEnumerable<ProductDto>> GetAllAsync()
         {
             try
             {
                 var products = await _productRepo.GetAllAsync();
-                var dtos = new List<ProductDTO>();
+                var dtos = new List<ProductDto>();
 
                 foreach (var entity in products)
                 {
@@ -38,32 +38,13 @@ namespace WebApi.Helpers.Services
             catch { }
             return null!;
         }
-
-        public async Task<IEnumerable<ProductDTO>> GetBySalesCategoryAsync(string salesCategory)
-        {
-            try
-            {
-                var allProducts = await _productRepo.GetAllAsync();
-                var products = allProducts.Where(x => x.SalesCategory == salesCategory);
-                var dto = new List<ProductDTO>();
-
-                foreach (var entity in products)
-                {
-                    dto.Add(entity);
-                }
-
-                return dto;
-            }
-            catch { }
-            return null!;
-        }
-        public async Task<IEnumerable<ProductDTO>> GetByCategoryAsync(string category)
+        public async Task<IEnumerable<ProductDto>> GetByCategoryAsync(string category)
         {
             try
             {
                 var allProducts = await _productRepo.GetAllAsync();
                 var products = allProducts.Where(x => x.Category == category);
-                var dto = new List<ProductDTO>();
+                var dto = new List<ProductDto>();
 
                 foreach (var entity in products)
                 {
@@ -76,12 +57,12 @@ namespace WebApi.Helpers.Services
             return null!;
         }
 
-        public async Task<ProductDTO> GetByIdAsync(Guid id)
+        public async Task<ProductDto> GetByIdAsync(int id)
         {
             try
             {
                 var product = await _productRepo.GetAsync(x => x.Id == id);
-                ProductDTO dto = product;
+                ProductDto dto = product;
 
                 return dto;
             }
@@ -89,12 +70,12 @@ namespace WebApi.Helpers.Services
             return null!;
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetByPriceAsync(int minPrice, int maxPrice)
+        public async Task<IEnumerable<ProductDto>> GetByPriceAsync(int minPrice, int maxPrice)
         {
             try
             {
                 var products = await _productRepo.GetListAsync(x => x.Price >= minPrice && x.Price <= maxPrice);
-                var dto = new List<ProductDTO>();
+                var dto = new List<ProductDto>();
 
                 foreach (var entity in products)
                 {
@@ -107,14 +88,14 @@ namespace WebApi.Helpers.Services
             return null!;
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetByNameAsync(string searchCondition)
+        public async Task<IEnumerable<ProductDto>> GetByNameAsync(string searchCondition)
         {
             try
             {
                 Expression<Func<ProductEntity, bool>> predicate = p => p.Name.ToLower().Contains(searchCondition.ToLower());
                 var products = await _productRepo.GetListAsync(predicate);
 
-                return products.Select(p => (ProductDTO)p);
+                return products.Select(p => (ProductDto)p);
             }
             catch { }
             return null!;
@@ -154,7 +135,7 @@ namespace WebApi.Helpers.Services
             return false;
         }
 
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task<bool> DeleteAsync(int id)
         {
             try
             {
@@ -167,7 +148,7 @@ namespace WebApi.Helpers.Services
             return false;
         }
 
-        public async Task<bool> UpdateRatingAsync(Guid productId)
+        public async Task<bool> UpdateRatingAsync(int productId)
         {
             try
             {
@@ -194,58 +175,5 @@ namespace WebApi.Helpers.Services
             return false;
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetFilteredProductsAsync(FilterSchema filter)
-        {
-
-            try
-            {
-                var products = await _productRepo.GetAllAsync();
-                var dtos = new List<ProductDTO>();
-                var category = new List<string>();
-
-                if (!string.IsNullOrEmpty(filter.Category))
-                {
-                    category = filter.Category.Split(',').Select(t => t.Trim()).ToList();
-                }
-
-                foreach (var product in products)
-                {
-                    dtos.Add(product);
-                }
-
-                if (filter.MinPrice != null)
-                {
-                    dtos = dtos.Where(p => p.Price >= filter.MinPrice).ToList();
-                }
-                if (filter.MaxPrice != null)
-                {
-                    dtos = dtos.Where(p => p.Price <= filter.MaxPrice).ToList();
-                }
-                if (category.Any() && category.Count > 0)
-                {
-                   // dtos = dtos.Where(p => category.All(t => p.Category != null && p.Category.Any(pt => string.Equals(pt, t, StringComparison.OrdinalIgnoreCase)))).ToList();
-                    // dtos = dtos.Where(p => tags.All(t => p.Tags!.Contains(t))).ToList();
-                }
-                if (!string.IsNullOrEmpty(filter.Name))
-                {
-                    dtos = dtos.Where(p => p.Name.ToLower().Contains(filter.Name.ToLower())).ToList();
-                }
-                if (!string.IsNullOrEmpty(filter.Category))
-                {
-                    dtos = dtos.Where(p => p.Category == filter.Category).ToList();
-                }
-                if (!string.IsNullOrEmpty(filter.SalesCategory))
-                {
-                    dtos = dtos.Where(p => p.SalesCategory == filter.SalesCategory).ToList();
-                }
-
-                if (filter.Amount.HasValue)
-                    dtos = dtos.Take(filter.Amount.Value).ToList();
-
-                return dtos;
-            }
-            catch { }
-            return null!;
-        }
     }
 }

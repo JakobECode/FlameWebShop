@@ -21,7 +21,7 @@ namespace WebApi
 
 
             builder.Services.AddControllers().AddNewtonsoftJson(options =>
-            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
@@ -34,33 +34,30 @@ namespace WebApi
             builder.Services.AddScoped<IMailService, MailService>();
             #endregion
 
-            #region SmsConfig
-            builder.Services.AddScoped<ISmsService, SmsService>();
-            #endregion
-
-            #region Helpers
+            #region Helpers / Services 
             builder.Services.AddScoped<JwtToken>();
             builder.Services.AddScoped<IAccountService, AccountService>();
-            builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IAddressService, AddressService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
-            builder.Services.AddScoped<IReviewService, ReviewService>();
-            builder.Services.AddScoped<IPaymentService, PaymentService>();
+            builder.Services.AddScoped<IMailService, MailService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
+            builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IReviewService, ReviewService>();
 
             #endregion
 
             #region Repositories
-            builder.Services.AddScoped<UserProfileRepository>();
-            builder.Services.AddScoped<ProductRepository>();
-            builder.Services.AddScoped<CategoryRepository>();
-            builder.Services.AddScoped<AddressRepository>();
             builder.Services.AddScoped<AddressItemRepository>();
-            builder.Services.AddScoped<UserProfileAddressItemRepository>();
-            builder.Services.AddScoped<ReviewRepository>();
+            builder.Services.AddScoped<AddressRepository>();
+            builder.Services.AddScoped<CategoryRepository>();
             builder.Services.AddScoped<CreditCardRepository>();
-            builder.Services.AddScoped<UserProfileCreditCardRepository>();
             builder.Services.AddScoped<OrderRepository>();
+            builder.Services.AddScoped<ProductRepository>();
+            builder.Services.AddScoped<ReviewRepository>();
+            builder.Services.AddScoped<UserProfileAddressItemRepository>();
+            builder.Services.AddScoped<UserProfileCreditCardRepository>();
+            builder.Services.AddScoped<UserProfileRepository>();
             #endregion
 
             #region Identity
@@ -81,37 +78,37 @@ namespace WebApi
             #endregion
 
             #region Authentication
-            //builder.Services.AddAuthentication(x =>
-            //{
-            //    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //}).AddJwtBearer(x =>
-            //{
-            //    x.Events = new JwtBearerEvents
-            //    {
-            //        OnTokenValidated = context =>
-            //        {
-            //            if (string.IsNullOrEmpty(context?.Principal?.FindFirst("id")?.Value) || string.IsNullOrEmpty(context?.Principal?.Identity?.Name))
-            //                context?.Fail("Unauthorized");
+            builder.Services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = context =>
+                    {
+                        if (string.IsNullOrEmpty(context?.Principal?.FindFirst("id")?.Value) || string.IsNullOrEmpty(context?.Principal?.Identity?.Name))
+                            context?.Fail("Unauthorized");
 
-            //            return Task.CompletedTask;
-            //        }
-            //    };
+                        return Task.CompletedTask;
+                    }
+                };
 
-            //    x.RequireHttpsMetadata = true;
-            //    x.SaveToken = true;
-            //    x.TokenValidationParameters = new TokenValidationParameters
-            //    {
-            //        ValidateIssuer = true,
-            //        ValidIssuer = builder.Configuration["TokenIssuer"],
-            //        ValidateAudience = true,
-            //        ValidAudience = builder.Configuration["TokenAudience"],
-            //        ValidateLifetime = true,
-            //        ValidateIssuerSigningKey = true,
-            //        IssuerSigningKey = new SymmetricSecurityKey(
-            //            Encoding.UTF8.GetBytes(builder.Configuration["TokenSecretKey"]!))
-            //    };
-            //});
+                x.RequireHttpsMetadata = true;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = builder.Configuration["TokenIssuer"],
+                    ValidateAudience = true,
+                    ValidAudience = builder.Configuration["TokenAudience"],
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(builder.Configuration["TokenSecretKey"]!))
+                };
+            });
             #endregion
 
             #region External Auth
@@ -131,8 +128,8 @@ namespace WebApi
             app.UseSwagger();
             app.UseSwaggerUI();
             app.UseHttpsRedirection();
-            //app.UseAuthentication();
-            //app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.MapControllers();
             app.Run();
         }

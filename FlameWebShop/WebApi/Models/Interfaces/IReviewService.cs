@@ -5,9 +5,9 @@ namespace WebApi.Models.Interfaces
 {
     public interface IReviewService
     {
+        Task<IEnumerable<ReviewDto>> GetAllAsync();
+        Task<IEnumerable<ReviewDto>> GetByProductId(int productId);
         Task<bool> CreateAsync(ReviewSchema schema, string userName);
-        Task<bool> DeleteAsync(Guid id);
-        Task<IEnumerable<ReviewDTO>> GetAllAsync();
-        Task<IEnumerable<ReviewDTO>> GetByProductId(Guid productId);
+        Task<bool> DeleteAsync(int id);
     }
 }

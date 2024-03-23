@@ -203,42 +203,5 @@ namespace WebApi.Controllers
 
         #endregion
 
-        [Route("ConfirmPhone")]
-        [HttpPost]
-       // [Authorize]
-        public async Task<IActionResult> ConfirmPhone(ConfirmPhoneSchema schema)
-        {
-            if (ModelState.IsValid)
-            {
-                var userName = HttpContext.User.Identity!.Name;
-                var addPhone = await _accountService.AddPhoneNumberToUser(schema.Phone, userName!);
-                if (addPhone)
-                {
-                    var dto = await _accountService.ConfirmPhone(schema.Phone, userName!);
-                    if (dto.Code != null)
-                    {
-                        return Ok(dto.Code);
-                    }
-                }
-                return Conflict();
-            }
-            return BadRequest("You need to enter a phone number");
-        }
-        [Route("VerifyPhone")]
-        [HttpPost]
-       // [Authorize]
-        public async Task<IActionResult> VerifyPhone()
-        {
-            if (ModelState.IsValid)
-            {
-                var userName = HttpContext.User.Identity!.Name;
-                if (await _accountService.VerifyPhone(userName!))
-                {
-                    return Ok("Your phone number is confirmed");
-                }
-            }
-            return Problem("Something went wrong, try again!");
-        }
-
     }
 }

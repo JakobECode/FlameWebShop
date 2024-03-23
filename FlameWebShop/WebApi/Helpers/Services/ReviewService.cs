@@ -22,12 +22,12 @@ namespace WebApi.Helpers.Services
             _userProfileRepo = userProfileRepo;
         }
 
-        public async Task<IEnumerable<ReviewDTO>> GetAllAsync()
+        public async Task<IEnumerable<ReviewDto>> GetAllAsync()
         {
             try
             {
                 var products = await _reviewRepo.GetAllAsync();
-                var dtos = new List<ReviewDTO>();
+                var dtos = new List<ReviewDto>();
 
                 foreach (var entity in products)
                 {
@@ -43,12 +43,12 @@ namespace WebApi.Helpers.Services
             return null!;
         }
 
-        public async Task<IEnumerable<ReviewDTO>> GetByProductId(Guid productId)
+        public async Task<IEnumerable<ReviewDto>> GetByProductId(int productId)
         {
             try
             {
                 var reviews = await _reviewRepo.GetListAsync(p => p.ProductId == productId);
-                var dtos = new List<ReviewDTO>();
+                var dtos = new List<ReviewDto>();
                 foreach (var entity in reviews)
                 {
                     var user = await _userProfileRepo.GetAsync(x => x.UserId == entity.UserId);
@@ -85,7 +85,7 @@ namespace WebApi.Helpers.Services
             return false;
         }
 
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task<bool> DeleteAsync(int id)
         {
             try
             {

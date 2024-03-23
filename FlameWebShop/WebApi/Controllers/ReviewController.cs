@@ -36,7 +36,7 @@ namespace WebApi.Controllers
 
         [Route("GetByProductId")]
         [HttpGet]
-        public async Task<IActionResult> GetByProductId(Guid productId)
+        public async Task<IActionResult> GetByProductId(int productId)
         {
             if (ModelState.IsValid)
             {

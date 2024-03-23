@@ -5,12 +5,12 @@ namespace WebApi.Models.Interfaces
 {
     public interface IOrderService
     {
-        Task<bool> CreateOrderAsync(OrderSchema schema, string userEmail);
-        Task<IEnumerable<OrderDTO>> GetAllOrdersAsync();
-        Task<OrderDTO> GetByOrderIdAsync(Guid orderId);
-        Task<IEnumerable<OrderDTO>> GetByUserIdAsync(Guid userId);
-        Task<IEnumerable<OrderDTO>> GetBySignedInUser(string userEmail);
+        Task<IEnumerable<OrderDto>> GetAllOrdersAsync();
+        Task<OrderDto> GetByOrderIdAsync(int orderId);
+        Task<IEnumerable<OrderDto>> GetBySignedInUser(string userEmail);
+        Task<IEnumerable<OrderDto>> GetByUserIdAsync(int userId);
         Task<bool> CancelOrder(OrderCancelSchema schema);
-        Task<bool> DeleteOrder(Guid orderId);
+        Task<bool> CreateOrderAsync(OrderSchema schema, string userEmail);
+        Task<bool> DeleteOrder(int orderId);
     }
 }

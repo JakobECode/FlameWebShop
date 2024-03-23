@@ -36,7 +36,7 @@ namespace WebApi.Controllers
 
         [Route("Get")]
         [HttpGet]
-        public async Task<IActionResult> GetById(Guid id)
+        public async Task<IActionResult> GetById(int id)
         {
             if (ModelState.IsValid)
             {
@@ -64,22 +64,6 @@ namespace WebApi.Controllers
             }
 
             return BadRequest("Sometihing went wrong, try again!");
-        }
-
-        [Route("SalesCategory")]
-        [HttpGet]
-        public async Task<IActionResult> GetBySalesCategory(string salescategory)
-        {
-            if (ModelState.IsValid)
-            {
-                var result = await _productService.GetBySalesCategoryAsync(salescategory);
-                if (result != null)
-                    return Ok(result);
-                else
-                    return NotFound("No products found");
-            }
-
-            return BadRequest("Something went wrong, try again!");
         }
 
         [Route("Price")]
@@ -114,22 +98,6 @@ namespace WebApi.Controllers
             return BadRequest("Something went wrong, try again!");
         }
 
-        [Route("Filter")]
-        [HttpPost]
-        public async Task<IActionResult> GetFiltered(FilterSchema schema)
-        {
-            if (ModelState.IsValid)
-            {
-                var result = await _productService.GetFilteredProductsAsync(schema);
-                if (result == null || !result.Any())
-                    return NotFound("No results found");
-
-                return Ok(result);
-            }
-
-            return BadRequest("Something went wrong, try again!");
-        }
-
         [Route("Add")]
         [HttpPost]
         //[Authorize]
@@ -148,7 +116,7 @@ namespace WebApi.Controllers
         [Route("Delete/{id}")]
         [HttpDelete]
        // [Authorize]
-        public async Task<IActionResult> DeleteProduct(Guid id)
+        public async Task<IActionResult> DeleteProduct(int id)
         {
             if (ModelState.IsValid)
             {

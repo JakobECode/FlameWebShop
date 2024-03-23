@@ -22,9 +22,8 @@ namespace WebApi.Helpers.Services
         private readonly JwtToken _jwt;
         private readonly Models.Interfaces.IMailService _mailService;
         private readonly IConfiguration _configuration;
-        private readonly ISmsService _smsService;
 
-        public AccountService(JwtToken jwt, RoleManager<IdentityRole> roleManager, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, UserProfileRepository userProfileRepo, Models.Interfaces.IMailService mailService, IConfiguration configuration, ISmsService smsService)
+        public AccountService(JwtToken jwt, RoleManager<IdentityRole> roleManager, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, UserProfileRepository userProfileRepo, Models.Interfaces.IMailService mailService, IConfiguration configuration)
         {
             _jwt = jwt;
             _roleManager = roleManager;
@@ -33,7 +32,6 @@ namespace WebApi.Helpers.Services
             _userProfileRepo = userProfileRepo;
             _mailService = mailService;
             _configuration = configuration;
-            _smsService = smsService;
         }
         #endregion
         public async Task<bool> RegisterAsync(RegisterAccountSchema schema)
@@ -178,7 +176,7 @@ namespace WebApi.Helpers.Services
         {
             await _signInManager.SignOutAsync();
         }
-        public async Task<UserProfileDTO> ReturnProfileAsync(string Id)
+        public async Task<UserProfileDto> ReturnProfileAsync(string Id)
         {
             var identityUser = await _userManager.FindByIdAsync(Id);
             var profile = await _userProfileRepo.GetAsync(x => x.UserId == Id);
@@ -187,7 +185,7 @@ namespace WebApi.Helpers.Services
                 return null!;
             }
 
-            var dto = new UserProfileDTO
+            var dto = new UserProfileDto
             {
                 FirstName = profile.FirstName,
                 LastName = profile.LastName,
@@ -206,7 +204,7 @@ namespace WebApi.Helpers.Services
             return dto;
         }
 
-        public async Task<UserProfileDTO> UpdateProfileAsync(UpdateUserSchema schema, string userName)
+        public async Task<UserProfileDto> UpdateProfileAsync(UpdateUserSchema schema, string userName)
         {
             try
             {
@@ -283,7 +281,7 @@ namespace WebApi.Helpers.Services
             catch { }
             return false;
         }
-        public async Task<UserProfileDTO> GetProfile(string userName)
+        public async Task<UserProfileDto> GetProfile(string userName)
         {
             try
             {
@@ -346,79 +344,7 @@ namespace WebApi.Helpers.Services
             }
             catch { }
             return false;
-
         }
-        public async Task<bool> AddPhoneNumberToUser(string phoneNumber, string email)
-        {
-            try
-            {
-                var user = await _userManager.FindByEmailAsync(email);
-                if (user != null)
-                {
-                    user.PhoneNumber = phoneNumber;
-                    var result = await _userManager.UpdateAsync(user);
-                    if (result.Succeeded)
-                        return true;
-                }
-            }
-            catch { }
-            return false;
-        }
-        public async Task<ConfirmPhoneDTO> ConfirmPhone(string phoneNo, string email)
-        {
-            var dto = new ConfirmPhoneDTO();
-            try
-            {
-                var user = await _userManager.FindByEmailAsync(email);
-
-                if (user == null)
-                {
-                    dto.Message = "Can't find the user in the database";
-                    return dto;
-                }
-
-                if (user.PhoneNumber != phoneNo)
-                {
-                    dto.Message = "The number you entered don't match the Phone number in our database";
-                    return dto;
-                }
-
-                if (!user.PhoneNumberConfirmed)
-                {
-                    var Code = await _userManager.GenerateChangePhoneNumberTokenAsync(user, phoneNo);
-
-                    var result = await _smsService.SendSmsAsync(phoneNo, $"Your code is : {Code}");
-                    if (result)
-                    {
-                        dto.Code = Code;
-                        dto.Message = "Success";
-                        return dto;
-                    }
-                    dto.Message = "Something went wrong with sending the sms, try again later";
-                    return dto;
-                }
-
-                dto.Message = "Your number is already confirmed in our database";
-                return dto;
-            }
-            catch { }
-            dto.Message = "Something went wrong";
-            return dto;
-
-        }
-        public async Task<bool> VerifyPhone(string email)
-        {
-            var user = await _userManager.FindByEmailAsync(email);
-            if (user != null)
-            {
-                user.PhoneNumberConfirmed = true;
-                var result = await _userManager.UpdateAsync(user);
-                if (result.Succeeded)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+       
     }
 }
