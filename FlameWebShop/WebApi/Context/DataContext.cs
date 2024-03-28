@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using WebApi.Models.Entities;
 
 namespace WebApi.Context
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<IdentityUser>
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {        
@@ -18,7 +20,7 @@ namespace WebApi.Context
         public DbSet<ProductEntity> ProductEntities { get; set; }
         public DbSet<CategoryEntity> CategoryEntities { get; set; }
         public DbSet<ReviewEntity> ReviewEntities { get; set; }
-        public DbSet<OrderEntity> orderEntities { get; set; }
+        public DbSet<OrderEntity> OrderEntities { get; set; }
 
     }
 }

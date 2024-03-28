@@ -51,19 +51,22 @@ namespace WebApi.Helpers.Services
                 if (identityResult.Succeeded)
                 {
                     var identityUser = await _userManager.FindByEmailAsync(schema.Email);
-                    var roleResult = await _userManager.AddToRoleAsync(identityUser!, schema.RoleName);
 
-                    if (roleResult.Succeeded)
+                    if (identityUser != null)
                     {
-                        UserProfileEntity userProfileEntity = schema;
-                        userProfileEntity.UserId = identityUser!.Id;
-                        await _userProfileRepo.AddAsync(userProfileEntity);
+                        var roleResult = await _userManager.AddToRoleAsync(identityUser, schema.RoleName);
+                        if (roleResult.Succeeded)
+                        {
+                            UserProfileEntity userProfileEntity = schema;
+                            userProfileEntity.UserId = identityUser!.Id;
+                            await _userProfileRepo.AddAsync(userProfileEntity);
 
-                        var token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
-                        var confirmationLink = $"{_configuration.GetSection("Urls").GetValue<string>("ApiUrl")}api/mail/confirmemail?email={WebUtility.UrlEncode(identityUser.Email)}&token={WebUtility.UrlEncode(token)}";
-                        var email = new MailData(new List<string> { identityUser.Email! }, "Confirmation link", $"Press {confirmationLink} to confirm your emailaddress");
-                        var result = await _mailService.SendAsync(email, new CancellationToken());
-                        return true;
+                            //var token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
+                            //var confirmationLink = $"{_configuration.GetSection("Urls").GetValue<string>("ApiUrl")}api/mail/confirmemail?email={WebUtility.UrlEncode(identityUser.Email)}&token={WebUtility.UrlEncode(token)}";
+                            //var email = new MailData(new List<string> { identityUser.Email! }, "Confirmation link", $"Press {confirmationLink} to confirm your emailaddress");
+                            //var result = await _mailService.SendAsync(email, new CancellationToken());
+                            //return true;
+                        }
                     }
                 }
             }

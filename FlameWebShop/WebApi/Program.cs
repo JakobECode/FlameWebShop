@@ -100,13 +100,13 @@ namespace WebApi
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
-                    ValidIssuer = builder.Configuration["TokenIssuer"],
+                    ValidIssuer = builder.Configuration["TokenValidation:Issuer"],
                     ValidateAudience = true,
-                    ValidAudience = builder.Configuration["TokenAudience"],
+                    ValidAudience = builder.Configuration["TokenValidation:Audience"],
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(builder.Configuration["TokenSecretKey"]!))
+                        Encoding.UTF8.GetBytes(builder.Configuration["TokenValidation:SecretKey"]!))
                 };
             });
             #endregion
