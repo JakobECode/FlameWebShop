@@ -20,9 +20,6 @@ namespace WebApi.Models.Schemas
 
         public static implicit operator ProductEntity(ProductSchema schema)
         {
-
-          
-
             return new ProductEntity
             {
                 Name = schema.Name,

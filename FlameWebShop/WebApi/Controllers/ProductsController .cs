@@ -6,7 +6,7 @@ using WebApi.Models.Schemas;
 
 namespace WebApi.Controllers
 {
-    [UseApiKey]
+    //[UseApiKey]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
@@ -86,16 +86,11 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetByName(string name)
         {
-            if (ModelState.IsValid)
-            {
-                var result = await _productService.GetByNameAsync(name);
-                if (result != null)
-                    return Ok(result);
-                else
-                    return NotFound("No products found");
-            }
+            var result = await _productService.GetByNameAsync(name);
+            if (result != null)
+                return Ok(result);
 
-            return BadRequest("Something went wrong, try again!");
+            return NotFound("No products found");
         }
 
         [Route("Add")]
