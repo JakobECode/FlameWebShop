@@ -38,16 +38,11 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetById(int id)
         {
-            if (ModelState.IsValid)
-            {
-                var result = await _productService.GetByIdAsync(id);
-                if (result != null)
-                    return Ok(result);
-                else
-                    return NotFound("No product found");
-            }
-
-            return BadRequest("Something went wrong, try again!");
+            var result = await _productService.GetByIdAsync(id);
+            if (result != null)
+                return Ok(result);
+            else
+                return NotFound("No product found");
         }
 
         [Route("Category")]
@@ -110,40 +105,26 @@ namespace WebApi.Controllers
 
         [Route("Delete/{id}")]
         [HttpDelete]
-       // [Authorize]
+        // [Authorize]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            if (ModelState.IsValid)
-            {
-                var userName = HttpContext.User.Identity!.Name;
-                if (userName != null)
-                {
-                    var result = await _productService.DeleteAsync(id);
-                    if (result)
-                        return Ok("Product deleted");
-                }
-            }
+            var result = await _productService.DeleteAsync(id);
+            if (result)
+                return Ok("Product deleted");
 
-            return BadRequest("Something went wrong, try again!");
+            return BadRequest("Unable to delete the product, try again!");
         }
 
         [Route("Update")]
         [HttpPut]
-       // [Authorize]
+        // [Authorize]
         public async Task<IActionResult> UpdateProduct(ProductSchema schema)
         {
-            if (ModelState.IsValid)
-            {
-                var userName = HttpContext.User.Identity!.Name;
-                if (userName != null)
-                {
-                    var result = await _productService.UpdateAsync(schema);
-                    if (result)
-                        return Ok("Product updated");
-                }
-            }
+            var result = await _productService.UpdateAsync(schema);
+            if (result)
+                return Ok("Product updated");
 
-            return BadRequest("Something went wrong, try again!");
+            return BadRequest("Unable to update the product, try again!");
         }
     }
 }
