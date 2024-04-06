@@ -6,6 +6,7 @@ namespace WebApi.Models.Schemas
 {
     public class ProductSchema
     {
+        public int id { get; set; } 
         [Required]
         public string Name { get; set; } = null!;
         [Required]
@@ -22,6 +23,7 @@ namespace WebApi.Models.Schemas
         {
             return new ProductEntity
             {
+                Id = schema.id,
                 Name = schema.Name,
                 Price = schema.Price,
                 ImageUrl = schema.ImageUrl,
