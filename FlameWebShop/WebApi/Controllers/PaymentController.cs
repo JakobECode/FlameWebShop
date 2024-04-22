@@ -7,7 +7,7 @@ using WebApi.Models.Schemas;
 namespace WebApi.Controllers
 {
     //[Authorize]
-    [UseApiKey]
+    //[UseApiKey]
     [Route("api/[controller]")]
     [ApiController]
     public class PaymentController : ControllerBase
@@ -23,39 +23,57 @@ namespace WebApi.Controllers
         [Route("GetUserCreditCards")]
         public async Task<IActionResult> GetUserCreditCards()
         {
-            if (ModelState.IsValid)
+            var userEmail = HttpContext.User.Identity!.Name;
+            if (!string.IsNullOrEmpty(userEmail))
             {
-                var result = await _paymentService.GetUserCreditCardsAsync(HttpContext.User.Identity!.Name!);
+                var result = await _paymentService.GetUserCreditCardsAsync(userEmail);
                 if (result != null)
                     return Ok(result);
+                else
+                    return NotFound("No credit cards found.");
             }
-            return BadRequest("Something went wrong, try again!");
+            else
+            {
+                return BadRequest("User must be signed in to access credit cards.");
+            }
         }
 
         [HttpPost]
         [Route("RegisterCreditCard")]
         public async Task<IActionResult> RegisterCreditCard(RegisterCreditCardSchema schema)
         {
-            if (ModelState.IsValid)
+            var userEmail = HttpContext.User.Identity!.Name;
+            if (!string.IsNullOrEmpty(userEmail))
             {
-                var result = await _paymentService.RegisterCreditCardsAsync(schema, HttpContext.User.Identity!.Name!);
+                var result = await _paymentService.RegisterCreditCardsAsync(schema, userEmail);
                 if (result)
-                    return Created("", null);
+                    return Created("", null); // Ideally, you should include a URI to the newly registered credit card here
+                else
+                    return BadRequest("Registration failed.");
             }
-            return BadRequest("Something went wrong, try again!");
+            else
+            {
+                return BadRequest("User must be signed in to register a credit card.");
+            }
         }
 
         [HttpDelete]
         [Route("RemoveCreditCard/{id}")]
         public async Task<IActionResult> RemoveCreditCard(int id)
         {
-            if (ModelState.IsValid)
+            var userEmail = HttpContext.User.Identity!.Name;
+            if (!string.IsNullOrEmpty(userEmail))
             {
-                var result = await _paymentService.DeleteCreditCardsAsync(id, HttpContext.User.Identity!.Name!);
+                var result = await _paymentService.DeleteCreditCardsAsync(id, userEmail);
                 if (result)
-                    return Ok();
+                    return Ok("Credit card removed successfully.");
+                else
+                    return NotFound("Credit card not found.");
             }
-            return BadRequest("Something went wrong, try again!");
+            else
+            {
+                return BadRequest("User must be signed in to remove a credit card.");
+            }
         }
     }
 }

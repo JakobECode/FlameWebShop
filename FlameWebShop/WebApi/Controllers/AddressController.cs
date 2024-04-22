@@ -6,7 +6,7 @@ using WebApi.Models.Schemas;
 
 namespace WebApi.Controllers
 {
-    [UseApiKey]
+    //[UseApiKey]
    // [Authorize]
     [Route("api/[controller]")]
     [ApiController]
@@ -23,69 +23,75 @@ namespace WebApi.Controllers
         [Route("RegisterAddress")]
         public async Task<IActionResult> RegisterAddress(RegisterAddressSchema schema)
         {
-            if (ModelState.IsValid)
+            var userName = HttpContext.User.Identity!.Name;
+            if (!string.IsNullOrEmpty(userName))
             {
-                var userName = HttpContext.User.Identity!.Name;
-                if (userName != null)
+                if (await _addressService.RegisterAddressAsync(schema, userName))
                 {
-                    if (await _addressService.RegisterAddressAsync(schema, userName!))
-                    {
-                        return Created("", null);
-                    }
+                    return Created("", null);  // Ideally, you should include a URI to the newly registered address here.
                 }
-                return BadRequest("Something went wrong, try again!");
+                else
+                {
+                    return BadRequest("Failed to register address.");
+                }
             }
-            return BadRequest("Something went wrong, try again!");
+            else
+            {
+                return BadRequest("User must be signed in to register an address.");
+            }
         }
 
         [HttpPut]
         [Route("UpdateAddress")]
         public async Task<IActionResult> UpdateAddress(UpdateAddressSchema schema)
         {
-            if (ModelState.IsValid)
+            var userName = HttpContext.User.Identity!.Name;
+            if (!string.IsNullOrEmpty(userName))
             {
-                var userName = HttpContext.User.Identity!.Name;
-                if (userName != null)
+                var result = await _addressService.UpdateAddressAsync(schema, userName);
+                if (result != null)
                 {
-                    var result = await _addressService.UpdateAddressAsync(schema, userName);
-                    if (result != null)
-                    {
-                        return Ok("Address updated");
-                    }
+                    return Ok("Address updated");
                 }
-
+                else
+                {
+                    return NotFound("Address not found or update failed.");
+                }
             }
-            return BadRequest("Something went wrong, try again!");
+            else
+            {
+                return BadRequest("User must be signed in to update an address.");
+            }
         }
 
         [HttpGet]
         [Route("GetUserAddresses")]
         public async Task<IActionResult> GetUserAddresses()
         {
-            if (ModelState.IsValid)
+            var userName = HttpContext.User.Identity!.Name;
+            if (!string.IsNullOrEmpty(userName))
             {
-                var userName = HttpContext.User.Identity!.Name;
-                if (userName != null)
-                {
-                    var result = await _addressService.GetUserAddressesAsync(userName);
-                    if (result != null)
-                        return Ok(result);
-                }
+                var result = await _addressService.GetUserAddressesAsync(userName);
+                if (result != null)
+                    return Ok(result);
+                else
+                    return NotFound("No addresses found.");
             }
-            return BadRequest("Something went wrong, try again!");
+            else
+            {
+                return BadRequest("User must be signed in to access addresses.");
+            }
         }
 
         [HttpDelete]
         [Route("RemoveAddress/{id}")]
         public async Task<IActionResult> RemoveAddress(int id)
         {
-            if (ModelState.IsValid)
-            {
-                var result = await _addressService.DeleteAddressAsync(id);
-                if (result)
-                    return Ok("Address removed");
-            }
-            return BadRequest("Something went wrong, try again!");
+            var result = await _addressService.DeleteAddressAsync(id);
+            if (result)
+                return Ok("Address removed");
+            else
+                return NotFound("Address not found.");
         }
 
     }

@@ -9,7 +9,7 @@ namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [UseApiKey]
+   // [UseApiKey]
     public class OrderController : ControllerBase
     {
         private readonly IOrderService _orderService;
@@ -25,73 +25,48 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllOrders()
         {
-            if (ModelState.IsValid)
-            {
-                var result = await _orderService.GetAllOrdersAsync();
-                if (result != null)
-                    return Ok(result);
+            var result = await _orderService.GetAllOrdersAsync();
+            if (result != null)
+                return Ok(result);
 
-                if (result == null)
-                    return NotFound("No orders found");
-            }
-
-            return BadRequest("Something went wrong, try again!");
+            return NotFound("No orders found");
         }
 
         [Route("GetByOrderId/{id}")]
         [HttpGet]
         public async Task<IActionResult> GetByOrderId(int orderId)
         {
-            if (ModelState.IsValid)
-            {
-                var result = await _orderService.GetByOrderIdAsync(orderId);
-                if (result != null)
-                    return Ok(result);
+            var result = await _orderService.GetByOrderIdAsync(orderId);
+            if (result != null)
+                return Ok(result);
 
-                if (result == null)
-                    return NotFound("No order found");
-            }
-
-            return BadRequest("Something went wrong, try again!");
+            return NotFound("No order found");
         }
 
         [Route("GetBySignedIn")]
         [HttpGet]
         public async Task<IActionResult> GetBySignedInUser()
         {
-            if (ModelState.IsValid)
-            {
-                var userEmail = HttpContext.User.Identity!.Name;
-                if (userEmail.IsNullOrEmpty())
-                    return BadRequest("You must be signed in to use this method");
+            var userEmail = HttpContext.User.Identity!.Name;
+            if (string.IsNullOrEmpty(userEmail))
+                return BadRequest("You must be signed in to use this method");
 
-                var result = await _orderService.GetBySignedInUser(userEmail!);
-                if (result != null)
-                    return Ok(result);
+            var result = await _orderService.GetBySignedInUser(userEmail!);
+            if (result != null)
+                return Ok(result);
 
-
-                if (result == null)
-                    return NotFound("No orders found");
-            }
-
-            return BadRequest("Something went wrong, try again!");
+            return NotFound("No orders found");
         }
 
         [Route("GetByUserId/{id}")]
         [HttpGet]
         public async Task<IActionResult> GetByUserId(int Id)
         {
-            if (ModelState.IsValid)
-            {
-                var result = await _orderService.GetByUserIdAsync(Id);
-                if (result != null)
-                    return Ok(result);
+            var result = await _orderService.GetByUserIdAsync(Id);
+            if (result != null)
+                return Ok(result);
 
-                if (result == null)
-                    return NotFound("No orders found");
-            }
-
-            return BadRequest("Something went wrong, try again!");
+            return NotFound("No orders found");
         }
 
 
@@ -100,13 +75,10 @@ namespace WebApi.Controllers
         //[Authorize]
         public async Task<IActionResult> CreateOrder(OrderSchema schema)
         {
-            if (ModelState.IsValid)
-            {
-                var userEmail = HttpContext.User.Identity!.Name;
-                var result = await _orderService.CreateOrderAsync(schema, userEmail!);
-                if (result)
-                    return Created("", null);
-            }
+            var userEmail = HttpContext.User.Identity!.Name;
+            var result = await _orderService.CreateOrderAsync(schema, userEmail!);
+            if (result)
+                return Created("", null); // Ideally, you should include a URI to the newly created resource here
 
             return BadRequest("Something went wrong, try again!");
         }
@@ -116,15 +88,16 @@ namespace WebApi.Controllers
         //[Authorize]
         public async Task<IActionResult> CancelOrder(OrderCancelSchema schema)
         {
-            if (ModelState.IsValid)
+            var userEmail = HttpContext.User.Identity!.Name;
+            if (userEmail != null)
             {
-                var userEmail = HttpContext.User.Identity!.Name;
-                if (userEmail != null)
-                {
-                    var result = await _orderService.CancelOrder(schema);
-                    if (result)
-                        return Ok("Order cancelled");
-                }
+                var result = await _orderService.CancelOrder(schema);
+                if (result)
+                    return Ok("Order cancelled");
+            }
+            else
+            {
+                return BadRequest("User must be signed in to cancel orders.");
             }
 
             return BadRequest("Something went wrong, try again!");
@@ -135,18 +108,19 @@ namespace WebApi.Controllers
         //[Authorize]
         public async Task<IActionResult> DeleteOrder(int orderId)
         {
-            if (ModelState.IsValid)
+            var userEmail = HttpContext.User.Identity!.Name;
+            if (userEmail != null)
             {
-                var userEmail = HttpContext.User.Identity!.Name;
-                if (userEmail != null)
-                {
-                    var result = await _orderService.DeleteOrder(orderId);
-                    if (result)
-                        return Ok("Order deleted");
-                }
+                var result = await _orderService.DeleteOrder(orderId);
+                if (result)
+                    return Ok("Order deleted");
+                else
+                    return NotFound("Order not found");
             }
-
-            return BadRequest("Something went wrong, try again!");
+            else
+            {
+                return BadRequest("User must be signed in to delete orders.");
+            }
         }
     }
 }
