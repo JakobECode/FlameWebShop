@@ -13,16 +13,16 @@ namespace WebApi.Helpers.Services
         private readonly OrderRepository _orderRepo;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IMailService _mailService;
-        private readonly AddressRepository _addressRepo;
+       // private readonly AddressRepository _addressRepo;
         private readonly IProductService _productService;
         private readonly ProductRepository _productRepo;
 
-        public OrderService(OrderRepository orderRepo, UserManager<IdentityUser> userManager, IMailService mailService, AddressRepository addressRepo, IProductService productService, ProductRepository productRepo)
+        public OrderService(OrderRepository orderRepo, UserManager<IdentityUser> userManager, IMailService mailService, IProductService productService, ProductRepository productRepo)
         {
             _orderRepo = orderRepo;
             _userManager = userManager;
             _mailService = mailService;
-            _addressRepo = addressRepo;
+           // _addressRepo = addressRepo;
             _productService = productService;
             _productRepo = productRepo;
         }
@@ -195,9 +195,9 @@ namespace WebApi.Helpers.Services
             {
                 var orderItems = schema.Items;
                 var user = await _userManager.FindByEmailAsync(userEmail);
-                var address = await _addressRepo.GetAsync(x => x.Id == schema.AddressId);
+                //var address = await _addressRepo.GetAsync(x => x.Id == schema.AddressId);
 
-                if (address != null)
+                if (user != null)
                 {
                     var order = new OrderEntity
                     {
@@ -205,7 +205,7 @@ namespace WebApi.Helpers.Services
                         OrderStatus = "Pending",
                         Items = new List<OrderItemEntity>(),
                         UserId = int.Parse(user!.Id),
-                        Address = address,
+                  //      Address = address,
                         Price = schema.Price
                     };
 

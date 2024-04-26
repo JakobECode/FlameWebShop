@@ -220,57 +220,6 @@ namespace WebApi.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("WebApi.Models.Entities.AddressEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PostalCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StreetName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AddressEntities");
-                });
-
-            modelBuilder.Entity("WebApi.Models.Entities.AddressItemEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AddressId");
-
-                    b.ToTable("AddressItems");
-                });
-
             modelBuilder.Entity("WebApi.Models.Entities.CategoryEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -326,8 +275,11 @@ namespace WebApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
@@ -335,15 +287,19 @@ namespace WebApi.Migrations
                     b.Property<string>("OrderStatus")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PostalCode")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("money");
+
+                    b.Property<string>("StreetName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AddressId");
 
                     b.ToTable("OrderEntities");
                 });
@@ -466,27 +422,6 @@ namespace WebApi.Migrations
                     b.ToTable("ReviewEntities");
                 });
 
-            modelBuilder.Entity("WebApi.Models.Entities.UserProfileAddressItemEntity", b =>
-                {
-                    b.Property<string>("UserProfileId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AddressItemId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserProfileUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("UserProfileId");
-
-                    b.HasIndex("AddressItemId");
-
-                    b.HasIndex("UserProfileUserId");
-
-                    b.ToTable("UserAddressItems");
-                });
-
             modelBuilder.Entity("WebApi.Models.Entities.UserProfileCreditCardEntity", b =>
                 {
                     b.Property<string>("UserProfileId")
@@ -574,52 +509,11 @@ namespace WebApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WebApi.Models.Entities.AddressItemEntity", b =>
-                {
-                    b.HasOne("WebApi.Models.Entities.AddressEntity", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Address");
-                });
-
-            modelBuilder.Entity("WebApi.Models.Entities.OrderEntity", b =>
-                {
-                    b.HasOne("WebApi.Models.Entities.AddressEntity", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Address");
-                });
-
             modelBuilder.Entity("WebApi.Models.Entities.OrderItemEntity", b =>
                 {
                     b.HasOne("WebApi.Models.Entities.OrderEntity", null)
                         .WithMany("Items")
                         .HasForeignKey("OrderEntityId");
-                });
-
-            modelBuilder.Entity("WebApi.Models.Entities.UserProfileAddressItemEntity", b =>
-                {
-                    b.HasOne("WebApi.Models.Entities.AddressItemEntity", "AddressItem")
-                        .WithMany("UserProfileAddressItems")
-                        .HasForeignKey("AddressItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebApi.Models.Entities.UserProfileEntity", "UserProfile")
-                        .WithMany("UserProfileAddressItems")
-                        .HasForeignKey("UserProfileUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AddressItem");
-
-                    b.Navigation("UserProfile");
                 });
 
             modelBuilder.Entity("WebApi.Models.Entities.UserProfileCreditCardEntity", b =>
@@ -652,11 +546,6 @@ namespace WebApi.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("WebApi.Models.Entities.AddressItemEntity", b =>
-                {
-                    b.Navigation("UserProfileAddressItems");
-                });
-
             modelBuilder.Entity("WebApi.Models.Entities.CreditCardEntity", b =>
                 {
                     b.Navigation("UserProfileCreditCards");
@@ -669,8 +558,6 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Models.Entities.UserProfileEntity", b =>
                 {
-                    b.Navigation("UserProfileAddressItems");
-
                     b.Navigation("UserProfileCreditCards");
                 });
 #pragma warning restore 612, 618

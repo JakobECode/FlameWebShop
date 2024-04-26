@@ -13,5 +13,11 @@
         public string? ImageUrl { get; set; }
 
         public string? Location { get; set; }
+        public string? StreetName { get; set; }
+        public string? PostalCode { get; set; }
+        public string? City { get; set; }
+        public string? Country { get; set; }
+
+
     }
 }

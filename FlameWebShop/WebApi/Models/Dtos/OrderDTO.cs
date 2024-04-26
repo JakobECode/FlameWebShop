@@ -7,7 +7,11 @@ namespace WebApi.Models.Dtos
         public int Id { get; set; }
         public DateTime OrderDate { get; set; }
         public string? OrderStatus { get; set; }
-        public AddressEntity? Address { get; set; }
+        public string? StreetName { get; set; }
+        public string? PostalCode { get; set; }
+        public string? City { get; set; }
+        public string? Country { get; set; }
+       // public AddressEntity? Address { get; set; }
         public decimal Price { get; set; }
         public List<OrderItemEntity> Items { get; set; } = null!;
 
@@ -18,9 +22,13 @@ namespace WebApi.Models.Dtos
                 Id = entity.Id,
                 OrderDate = entity.OrderDate,
                 OrderStatus = entity.OrderStatus,
-                Address = entity.Address,
+               // Address = entity.Address,
                 Items = entity.Items,
                 Price = entity.Price,
+                StreetName = entity.StreetName,
+                PostalCode = entity.PostalCode,
+                City = entity.City,
+                Country = entity.Country,   
             };
         }
     }

@@ -16,6 +16,6 @@ namespace WebApi.Models.Entities
         [Required]
         public int AddressItemId { get; set; }
 
-        public AddressItemEntity AddressItem { get; set; } = null!;
+       // public AddressItemEntity AddressItem { get; set; } = null!;
     }
 }

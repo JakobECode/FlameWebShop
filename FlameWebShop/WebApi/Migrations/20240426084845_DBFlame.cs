@@ -6,27 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WebApi.Migrations
 {
     /// <inheritdoc />
-    public partial class DbFlame : Migration
+    public partial class DBFlame : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "AddressEntities",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    StreetName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AddressEntities", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -96,6 +80,26 @@ namespace WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OrderEntities",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    OrderStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StreetName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<decimal>(type: "money", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderEntities", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProductEntities",
                 columns: table => new
                 {
@@ -134,49 +138,6 @@ namespace WebApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ReviewEntities", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AddressItems",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AddressId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AddressItems", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AddressItems_AddressEntities_AddressId",
-                        column: x => x.AddressId,
-                        principalTable: "AddressEntities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "OrderEntities",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    OrderStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Price = table.Column<decimal>(type: "money", nullable: false),
-                    AddressId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrderEntities", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_OrderEntities_AddressEntities_AddressId",
-                        column: x => x.AddressId,
-                        principalTable: "AddressEntities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -329,31 +290,6 @@ namespace WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserAddressItems",
-                columns: table => new
-                {
-                    UserProfileId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserProfileUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    AddressItemId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserAddressItems", x => x.UserProfileId);
-                    table.ForeignKey(
-                        name: "FK_UserAddressItems_AddressItems_AddressItemId",
-                        column: x => x.AddressItemId,
-                        principalTable: "AddressItems",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserAddressItems_UserProfileEntities_UserProfileUserId",
-                        column: x => x.UserProfileUserId,
-                        principalTable: "UserProfileEntities",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "UserProfileCreditCardEntity",
                 columns: table => new
                 {
@@ -376,11 +312,6 @@ namespace WebApi.Migrations
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AddressItems_AddressId",
-                table: "AddressItems",
-                column: "AddressId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -422,24 +353,9 @@ namespace WebApi.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderEntities_AddressId",
-                table: "OrderEntities",
-                column: "AddressId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_OrderItemEntity_OrderEntityId",
                 table: "OrderItemEntity",
                 column: "OrderEntityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserAddressItems_AddressItemId",
-                table: "UserAddressItems",
-                column: "AddressItemId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserAddressItems_UserProfileUserId",
-                table: "UserAddressItems",
-                column: "UserProfileUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserProfileCreditCardEntity_CreditCardId",
@@ -478,9 +394,6 @@ namespace WebApi.Migrations
                 name: "ReviewEntities");
 
             migrationBuilder.DropTable(
-                name: "UserAddressItems");
-
-            migrationBuilder.DropTable(
                 name: "UserProfileCreditCardEntity");
 
             migrationBuilder.DropTable(
@@ -490,16 +403,10 @@ namespace WebApi.Migrations
                 name: "OrderEntities");
 
             migrationBuilder.DropTable(
-                name: "AddressItems");
-
-            migrationBuilder.DropTable(
                 name: "CreditCardEntities");
 
             migrationBuilder.DropTable(
                 name: "UserProfileEntities");
-
-            migrationBuilder.DropTable(
-                name: "AddressEntities");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

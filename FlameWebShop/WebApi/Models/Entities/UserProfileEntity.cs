@@ -12,7 +12,7 @@ namespace WebApi.Models.Entities
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
         public string? ImageUrl { get; set; }
-        public ICollection<UserProfileAddressItemEntity> UserProfileAddressItems { get; set; } = new HashSet<UserProfileAddressItemEntity>();
+      //  public ICollection<UserProfileAddressItemEntity> UserProfileAddressItems { get; set; } = new HashSet<UserProfileAddressItemEntity>();
         public ICollection<UserProfileCreditCardEntity> UserProfileCreditCards { get; set; } = new HashSet<UserProfileCreditCardEntity>();
     }
 }

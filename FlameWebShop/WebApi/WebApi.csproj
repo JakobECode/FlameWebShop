@@ -8,6 +8,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\AddressController.cs" />
+    <Compile Remove="Helpers\Repositories\AddressItemRepository.cs" />
+    <Compile Remove="Helpers\Repositories\AddressRepository.cs" />
+    <Compile Remove="Helpers\Repositories\UserProfileAddressItemRepository.cs" />
+    <Compile Remove="Helpers\Services\AddressService.cs" />
+    <Compile Remove="Models\Dtos\AddressItemDto.cs" />
+    <Compile Remove="Models\Entities\AddressEntity.cs" />
+    <Compile Remove="Models\Entities\AddressItemEntity.cs" />
+    <Compile Remove="Models\Entities\UserProfileAddressItemEntity.cs" />
+    <Compile Remove="Models\Interfaces\IAddressService.cs" />
+    <Compile Remove="Models\Schemas\AddressSchema.cs" />
+    <Compile Remove="Models\Schemas\RegisterAddressSchema.cs" />
+    <Compile Remove="Models\Schemas\UpdateAddressSchema.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MailKit" Version="4.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.17" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.17" />

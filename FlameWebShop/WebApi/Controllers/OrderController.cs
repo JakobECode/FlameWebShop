@@ -76,7 +76,8 @@ namespace WebApi.Controllers
         public async Task<IActionResult> CreateOrder(OrderSchema schema)
         {
             var userEmail = HttpContext.User.Identity!.Name;
-            var result = await _orderService.CreateOrderAsync(schema, userEmail!);
+            userEmail = "Test@gmail.com";
+            var result = await _orderService.CreateOrderAsync(schema, userEmail);
             if (result)
                 return Created("", null); // Ideally, you should include a URI to the newly created resource here
 
