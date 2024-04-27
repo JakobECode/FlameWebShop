@@ -201,12 +201,16 @@ namespace WebApi.Helpers.Services
                 {
                     var order = new OrderEntity
                     {
+                        UserId = int.Parse(user!.Id),
                         OrderDate = DateTime.Now,
                         OrderStatus = "Pending",
-                        Items = new List<OrderItemEntity>(),
-                        UserId = int.Parse(user!.Id),
-                  //      Address = address,
-                        Price = schema.Price
+                        StreetName = schema.StreetName,   
+                        PostalCode = schema.PostalCode,   
+                        City = schema.City,        
+                        Country = schema.Country,
+                        //Address = address,
+                        Price = schema.Price,
+                        Items = new List<OrderItemEntity>()
                     };
 
                     foreach (var item in orderItems)
