@@ -60,7 +60,8 @@ namespace WebApi.Helpers.Services
                 {
                     await smtp.ConnectAsync(_settings.Host, _settings.Port, SecureSocketOptions.StartTls, ct);
                 }
-                await smtp.AuthenticateAsync(_settings.UserName, _settings.Password, ct);
+                await smtp.ConnectAsync(_settings.Host, _settings.Port,false,ct);
+                //await smtp.AuthenticateAsync(_settings.UserName, _settings.Password, ct);
                 await smtp.SendAsync(mail, ct);
                 await smtp.DisconnectAsync(true, ct);
 

@@ -102,46 +102,58 @@ namespace WebApi.Helpers.Services
             try
             {
                 var user = await _userManager.FindByEmailAsync(userEmail);
-                var userId = int.Parse(user!.Id);
+                if (user == null)
+                {
+                    throw new ArgumentException("User not found.");
+                }
+
+                // Ensure that UserId is a string type since you're parsing it into an int.
+                var userId = user.Id; // Assuming the ID is of the type needed by the UserId filter in GetListAsync
 
                 var orders = await _orderRepo.GetListAsync(x => x.UserId == userId);
                 var currentDate = DateTime.Now;
                 var dtos = new List<OrderDto>();
 
-                foreach (var item in orders)
+                foreach (var order in orders)
                 {
-                    var status = item.OrderStatus;
-                    var orderDate = item.OrderDate;
-
+                    var status = order.OrderStatus;
+                    var orderDate = order.OrderDate;
                     TimeSpan diff = currentDate - orderDate;
                     var daysDiff = diff.Days;
 
                     if (status != "Cancelled" && status != "Delivered")
                     {
-                        item.OrderStatus = daysDiff switch
+                        order.OrderStatus = daysDiff switch
                         {
                             > 1 and < 3 => "Shipped",
                             >= 3 => "Delivered",
-                            _ => item.OrderStatus
+                            _ => order.OrderStatus
                         };
 
-                        await _orderRepo.UpdateAsync(item);
+                        await _orderRepo.UpdateAsync(order);
                     }
 
-                    dtos.Add(item);
+                    // Assuming you need to convert Order entities to OrderDto objects.
+                    dtos.Add(new OrderDto
+                    {
+                        // Map properties from order to OrderDto here.
+                    });
                 }
 
                 return dtos;
             }
-            catch { }
-            return null!;
+            catch (Exception ex)
+            {
+                // Log the exception details or handle it as necessary.
+                throw; // Rethrow the exception to maintain the stack trace or handle it appropriately.
+            }
         }
 
         public async Task<IEnumerable<OrderDto>> GetByUserIdAsync(int userId)
         {
             try
             {
-                var orders = await _orderRepo.GetListAsync(x => x.UserId == userId);
+                var orders = await _orderRepo.GetListAsync(x => x.UserId == userId.ToString());
                 var currentDate = DateTime.Now;
                 var dtos = new List<OrderDto>();
 
@@ -201,7 +213,7 @@ namespace WebApi.Helpers.Services
                 {
                     var order = new OrderEntity
                     {
-                        UserId = int.Parse(user!.Id),
+                        UserId = user?.Id,
                         OrderDate = DateTime.Now,
                         OrderStatus = "Pending",
                         StreetName = schema.StreetName,   

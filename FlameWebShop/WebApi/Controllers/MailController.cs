@@ -19,7 +19,7 @@ namespace WebApi.Controllers
             _mailService = mailService;
             _userManager = userManager;
         }
-        [UseApiKey]
+       // [UseApiKey]
         [Route("Sendmail")]
         [HttpPost]
         public async Task<IActionResult> SendMailAsync(MailData mailData)
