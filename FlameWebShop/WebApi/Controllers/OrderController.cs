@@ -32,11 +32,11 @@ namespace WebApi.Controllers
             return NotFound("No orders found");
         }
 
-        [Route("GetByOrderId/{id}")]
+        [Route("GetByOrderId/{id}")] // Route template
         [HttpGet]
-        public async Task<IActionResult> GetByOrderId(int orderId)
+        public async Task<IActionResult> GetByOrderId(int id) // Parameter name matches route template
         {
-            var result = await _orderService.GetByOrderIdAsync(orderId);
+            var result = await _orderService.GetByOrderIdAsync(id);
             if (result != null)
                 return Ok(result);
 

@@ -8,6 +8,7 @@ namespace WebApi.Models.Entities
         public string? UserId { get; set; }
         public DateTime OrderDate { get; set; }
         public string? OrderStatus { get; set; }
+        public string? Email { get; set; }
         public string? StreetName { get; set; }
         public string? PostalCode { get; set; }
         public string? City { get; set; }

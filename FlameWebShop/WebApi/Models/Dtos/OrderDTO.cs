@@ -7,6 +7,7 @@ namespace WebApi.Models.Dtos
         public int Id { get; set; }
         public DateTime OrderDate { get; set; }
         public string? OrderStatus { get; set; }
+        public string? Email { get; set; }
         public string? StreetName { get; set; }
         public string? PostalCode { get; set; }
         public string? City { get; set; }
@@ -23,6 +24,7 @@ namespace WebApi.Models.Dtos
                 OrderDate = entity.OrderDate,
                 OrderStatus = entity.OrderStatus,
                // Address = entity.Address,
+                Email = entity.Email,
                 Items = entity.Items,
                 Price = entity.Price,
                 StreetName = entity.StreetName,
