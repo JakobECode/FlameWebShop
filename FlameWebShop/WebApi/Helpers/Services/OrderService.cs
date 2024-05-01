@@ -216,6 +216,7 @@ namespace WebApi.Helpers.Services
                         UserId = user?.Id,
                         OrderDate = DateTime.Now,
                         OrderStatus = "Pending",
+                        Email = schema.Email,
                         StreetName = schema.StreetName,   
                         PostalCode = schema.PostalCode,   
                         City = schema.City,        
