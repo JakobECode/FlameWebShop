@@ -7,6 +7,7 @@ namespace WebApi.Models.Entities
         public int Id { get; set; }
         public string? UserId { get; set; }
         public DateTime OrderDate { get; set; }
+        public int Quantity { get; set; }
         public string? OrderStatus { get; set; }
         public string? Email { get; set; }
         public string? StreetName { get; set; }
@@ -14,9 +15,6 @@ namespace WebApi.Models.Entities
         public string? City { get; set; }
         public string? Country { get; set; }
 
-        [Column(TypeName = "money")]
-        public decimal Price { get; set; }
-        //public AddressEntity Address { get; set; } = null!;
         public List<OrderItemEntity> Items { get; set; } = null!;
     }
 }

@@ -214,6 +214,7 @@ namespace WebApi.Helpers.Services
                     var order = new OrderEntity
                     {
                         UserId = user?.Id,
+                        Quantity = schema.Quantity,
                         OrderDate = DateTime.Now,
                         OrderStatus = "Pending",
                         Email = schema.Email,
@@ -221,8 +222,6 @@ namespace WebApi.Helpers.Services
                         PostalCode = schema.PostalCode,   
                         City = schema.City,        
                         Country = schema.Country,
-                        //Address = address,
-                        Price = schema.Price,
                         Items = new List<OrderItemEntity>()
                     };
 
@@ -233,11 +232,6 @@ namespace WebApi.Helpers.Services
                         var orderItem = new OrderItemEntity
                         {
                             ProductId = item.ProductId,
-                            ProductName = product.Name,
-                            UnitPrice = product.Price,
-                            ImageUrl = product.ImageUrl,
-
-                            Quantity = item.Quantity,
                         };
                         order.Items.Add(orderItem);
                     }

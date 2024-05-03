@@ -6,9 +6,8 @@ namespace WebApi.Models.Entities
 {
     public class UserProfileEntity
     {
-        [Key, ForeignKey(nameof(User))]
+        [Key, ForeignKey(nameof(UserId))]
         public string UserId { get; set; } = null!;
-        public IdentityUser User { get; set; } = null!;
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
         public string? ImageUrl { get; set; }

@@ -2,9 +2,10 @@
 {
     public class OrderSchema
     {
-       // public int AddressId { get; set; }
+        
+        public int Id { get; set; }
         public List<OrderItemSchema> Items { get; set; } = null!;
-        public decimal Price { get; set; }
+        public int Quantity { get; set; }
         public string? Email { get; set; }
         public string? StreetName { get; set; }
         public string? PostalCode { get; set; }
