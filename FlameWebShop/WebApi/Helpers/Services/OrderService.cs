@@ -11,18 +11,18 @@ namespace WebApi.Helpers.Services
     public class OrderService : IOrderService
     {
         private readonly OrderRepository _orderRepo;
+        private readonly OrderItemRepository _orderItemRepo;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IMailService _mailService;
-       // private readonly AddressRepository _addressRepo;
         private readonly IProductService _productService;
         private readonly ProductRepository _productRepo;
 
-        public OrderService(OrderRepository orderRepo, UserManager<IdentityUser> userManager, IMailService mailService, IProductService productService, ProductRepository productRepo)
+        public OrderService(OrderRepository orderRepo, UserManager<IdentityUser> userManager, IMailService mailService, IProductService productService, ProductRepository productRepo, OrderItemRepository orderItemRepository)
         {
+            _orderItemRepo = orderItemRepository;
             _orderRepo = orderRepo;
             _userManager = userManager;
             _mailService = mailService;
-           // _addressRepo = addressRepo;
             _productService = productService;
             _productRepo = productRepo;
         }
@@ -40,21 +40,6 @@ namespace WebApi.Helpers.Services
                     var status = entity.OrderStatus;
                     var orderDate = entity.OrderDate;
 
-                    TimeSpan diff = currentDate - orderDate;
-                    var daysDiff = diff.Days;
-
-                    if (status != "Cancelled" && status != "Delivered")
-                    {
-                        entity.OrderStatus = daysDiff switch
-                        {
-                            > 1 and < 3 => "Shipped",
-                            >= 3 => "Delivered",
-                            _ => entity.OrderStatus
-                        };
-
-                        await _orderRepo.UpdateAsync(entity);
-                    }
-
                     dtos.Add(entity);
                 }
 
@@ -70,26 +55,13 @@ namespace WebApi.Helpers.Services
             {
                 var currentDate = DateTime.Now;
                 var order = await _orderRepo.GetAsync(x => x.Id == orderId);
+                var orderItem = await _orderItemRepo.GetAsync( x => x.OrderId == orderId);
 
                 var status = order.OrderStatus;
                 var orderDate = order.OrderDate;
 
-                TimeSpan diff = currentDate - orderDate;
-                var daysDiff = diff.Days;
-
-                if (status != "Cancelled" && status != "Delivered")
-                {
-                    order.OrderStatus = daysDiff switch
-                    {
-                        > 1 and < 3 => "Shipped",
-                        >= 3 => "Delivered",
-                        _ => order.OrderStatus
-                    };
-
-                    await _orderRepo.UpdateAsync(order);
-                }
-
                 OrderDto dto = order;
+                dto.Items =  
 
                 return dto;
             }
@@ -97,59 +69,7 @@ namespace WebApi.Helpers.Services
             return null!;
         }
 
-        public async Task<IEnumerable<OrderDto>> GetBySignedInUser(string userEmail)
-        {
-            try
-            {
-                var user = await _userManager.FindByEmailAsync(userEmail);
-                if (user == null)
-                {
-                    throw new ArgumentException("User not found.");
-                }
-
-                // Ensure that UserId is a string type since you're parsing it into an int.
-                var userId = user.Id; // Assuming the ID is of the type needed by the UserId filter in GetListAsync
-
-                var orders = await _orderRepo.GetListAsync(x => x.UserId == userId);
-                var currentDate = DateTime.Now;
-                var dtos = new List<OrderDto>();
-
-                foreach (var order in orders)
-                {
-                    var status = order.OrderStatus;
-                    var orderDate = order.OrderDate;
-                    TimeSpan diff = currentDate - orderDate;
-                    var daysDiff = diff.Days;
-
-                    if (status != "Cancelled" && status != "Delivered")
-                    {
-                        order.OrderStatus = daysDiff switch
-                        {
-                            > 1 and < 3 => "Shipped",
-                            >= 3 => "Delivered",
-                            _ => order.OrderStatus
-                        };
-
-                        await _orderRepo.UpdateAsync(order);
-                    }
-
-                    // Assuming you need to convert Order entities to OrderDto objects.
-                    dtos.Add(new OrderDto
-                    {
-                        // Map properties from order to OrderDto here.
-                    });
-                }
-
-                return dtos;
-            }
-            catch (Exception ex)
-            {
-                // Log the exception details or handle it as necessary.
-                throw; // Rethrow the exception to maintain the stack trace or handle it appropriately.
-            }
-        }
-
-        public async Task<IEnumerable<OrderDto>> GetByUserIdAsync(int userId)
+        public async Task<IEnumerable<OrderDto>> GetOrdersByUserIdAsync(int userId)
         {
             try
             {
@@ -201,7 +121,7 @@ namespace WebApi.Helpers.Services
             return false;
         }
 
-        public async Task<bool> CreateOrderAsync(OrderSchema schema, string userEmail)
+        public async Task<bool> CreateOrderAsync(OrderDto schema, string userEmail)
         {
             try
             {
@@ -222,19 +142,18 @@ namespace WebApi.Helpers.Services
                         PostalCode = schema.PostalCode,   
                         City = schema.City,        
                         Country = schema.Country,
-                        Items = new List<OrderItemEntity>()
                     };
 
-                    foreach (var item in orderItems)
-                    {
-                        var product = await _productRepo.GetAsync(x => x.Id == item.ProductId);
+                    //foreach (var item in orderItems)
+                    //{
+                    //    var product = await _productRepo.GetAsync(x => x.Id == item.ProductId);
 
-                        var orderItem = new OrderItemEntity
-                        {
-                            ProductId = item.ProductId,
-                        };
-                        order.Items.Add(orderItem);
-                    }
+                    //    var orderItem = new OrderItemEntity
+                    //    {
+                    //        ProductId = item.ProductId,
+                    //    };
+                    //    order.Items.Add(orderItem);
+                    //}
 
                     await _orderRepo.AddAsync(order);
 

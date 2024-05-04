@@ -19,6 +19,7 @@
     <Compile Remove="Models\Entities\UserProfileAddressItemEntity.cs" />
     <Compile Remove="Models\Interfaces\IAddressService.cs" />
     <Compile Remove="Models\Schemas\AddressSchema.cs" />
+    <Compile Remove="Models\Schemas\OrderSchema.cs" />
     <Compile Remove="Models\Schemas\RegisterAddressSchema.cs" />
     <Compile Remove="Models\Schemas\UpdateAddressSchema.cs" />
   </ItemGroup>

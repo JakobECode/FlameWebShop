@@ -1,4 +1,5 @@
-﻿using WebApi.Models.Dtos;
+﻿using System.Collections;
+using WebApi.Models.Dtos;
 using WebApi.Models.Schemas;
 
 namespace WebApi.Models.Interfaces
@@ -7,10 +8,9 @@ namespace WebApi.Models.Interfaces
     {
         Task<IEnumerable<OrderDto>> GetAllOrdersAsync();
         Task<OrderDto> GetByOrderIdAsync(int orderId);
-        Task<IEnumerable<OrderDto>> GetBySignedInUser(string userEmail);
-        Task<IEnumerable<OrderDto>> GetByUserIdAsync(int userId);
+        Task<IEnumerable<OrderDto>> GetOrdersByUserIdAsync(int userId);
         Task<bool> CancelOrder(OrderCancelSchema schema);
-        Task<bool> CreateOrderAsync(OrderSchema schema, string userEmail);
+        Task<bool> CreateOrderAsync(OrderDto schema, string userEmail);
         Task<bool> DeleteOrder(int orderId);
     }
 }

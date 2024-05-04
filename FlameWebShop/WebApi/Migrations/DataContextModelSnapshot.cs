@@ -276,12 +276,15 @@ namespace WebApi.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("OrderDate")
@@ -297,9 +300,11 @@ namespace WebApi.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("StreetName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -315,7 +320,7 @@ namespace WebApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("OrderEntityId")
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<int>("ProductId")
@@ -323,9 +328,7 @@ namespace WebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderEntityId");
-
-                    b.ToTable("OrderItemEntity");
+                    b.ToTable("OrderItemEntities");
                 });
 
             modelBuilder.Entity("WebApi.Models.Entities.ProductEntity", b =>
@@ -499,13 +502,6 @@ namespace WebApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WebApi.Models.Entities.OrderItemEntity", b =>
-                {
-                    b.HasOne("WebApi.Models.Entities.OrderEntity", null)
-                        .WithMany("Items")
-                        .HasForeignKey("OrderEntityId");
-                });
-
             modelBuilder.Entity("WebApi.Models.Entities.UserProfileCreditCardEntity", b =>
                 {
                     b.HasOne("WebApi.Models.Entities.CreditCardEntity", "CreditCard")
@@ -525,25 +521,9 @@ namespace WebApi.Migrations
                     b.Navigation("UserProfile");
                 });
 
-            modelBuilder.Entity("WebApi.Models.Entities.UserProfileEntity", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("WebApi.Models.Entities.CreditCardEntity", b =>
                 {
                     b.Navigation("UserProfileCreditCards");
-                });
-
-            modelBuilder.Entity("WebApi.Models.Entities.OrderEntity", b =>
-                {
-                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("WebApi.Models.Entities.UserProfileEntity", b =>

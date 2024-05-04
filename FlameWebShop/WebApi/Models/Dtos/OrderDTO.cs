@@ -14,7 +14,7 @@ namespace WebApi.Models.Dtos
         public string? City { get; set; }
         public string? Country { get; set; }
    
-        public List<OrderItemEntity> Items { get; set; } = null!;
+        public List<ProductDto> Items { get; set; } = null!;
 
         public static implicit operator OrderDto(OrderEntity entity)
         {
@@ -24,9 +24,8 @@ namespace WebApi.Models.Dtos
                 OrderDate = entity.OrderDate,
                 Quantity = entity.Quantity,
                 OrderStatus = entity.OrderStatus,
-               // Address = entity.Address,
                 Email = entity.Email,
-                Items = entity.Items,
+               // Items = entity.Items,
                 StreetName = entity.StreetName,
                 PostalCode = entity.PostalCode,
                 City = entity.City,

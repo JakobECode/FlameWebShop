@@ -14,14 +14,17 @@ namespace WebApi.Context
         }
 
         public DbSet<UserProfileEntity> UserProfileEntities { get; set; }
-       // public DbSet<UserProfileAddressItemEntity> UserAddressItems { get; set; }
-        //public DbSet<AddressEntity> AddressEntities { get; set; }
-        //public DbSet<AddressItemEntity> AddressItems { get; set; }
         public DbSet<CreditCardEntity> CreditCardEntities { get; set; }
         public DbSet<ProductEntity> ProductEntities { get; set; }
         public DbSet<CategoryEntity> CategoryEntities { get; set; }
         public DbSet<ReviewEntity> ReviewEntities { get; set; }
         public DbSet<OrderEntity> OrderEntities { get; set; }
+        public DbSet<OrderItemEntity> OrderItemEntities { get; set; }
+
+        // public DbSet<UserProfileAddressItemEntity> UserAddressItems { get; set; }
+        //public DbSet<AddressEntity> AddressEntities { get; set; }
+        //public DbSet<AddressItemEntity> AddressItems { get; set; }
+
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{
         //    modelBuilder.Entity<AspNetRoles>().ToTable(nameof(TableNames), t =>

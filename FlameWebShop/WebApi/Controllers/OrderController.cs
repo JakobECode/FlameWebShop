@@ -5,6 +5,9 @@ using WebApi.Helpers.Filters;
 using WebApi.Models.Interfaces;
 using WebApi.Models.Schemas;
 
+
+using WebApi.Models.Dtos;
+
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
@@ -43,26 +46,26 @@ namespace WebApi.Controllers
             return NotFound("No order found");
         }
 
-        [Route("GetBySignedIn")]
-        [HttpGet]
-        public async Task<IActionResult> GetBySignedInUser()
-        {
-            var userEmail = HttpContext.User.Identity!.Name;
-            if (string.IsNullOrEmpty(userEmail))
-                return BadRequest("You must be signed in to use this method");
+        //[Route("GetBySignedIn")]
+        //[HttpGet]
+        //public async Task<IActionResult> GetBySignedInUser()
+        //{
+        //    var userEmail = HttpContext.User.Identity!.Name;
+        //    if (string.IsNullOrEmpty(userEmail))
+        //        return BadRequest("You must be signed in to use this method");
 
-            var result = await _orderService.GetBySignedInUser(userEmail!);
-            if (result != null)
-                return Ok(result);
+        //    var result = await _orderService.GetBySignedInUser(userEmail!);
+        //    if (result != null)
+        //        return Ok(result);
 
-            return NotFound("No orders found");
-        }
+        //    return NotFound("No orders found");
+        //}
 
         [Route("GetByUserId/{id}")]
         [HttpGet]
         public async Task<IActionResult> GetByUserId(int Id)
         {
-            var result = await _orderService.GetByUserIdAsync(Id);
+            var result = await _orderService.GetByOrderIdAsync(Id);
             if (result != null)
                 return Ok(result);
 
@@ -73,7 +76,7 @@ namespace WebApi.Controllers
         [Route("CreateOrder")]
         [HttpPost]
         //[Authorize]
-        public async Task<IActionResult> CreateOrder(OrderSchema schema)
+        public async Task<IActionResult> CreateOrder(OrderDto schema)
         {
             var userEmail = HttpContext.User.Identity!.Name;
             userEmail = "Test@gmail.com";
