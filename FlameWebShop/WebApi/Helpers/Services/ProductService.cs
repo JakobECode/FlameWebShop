@@ -29,7 +29,7 @@ namespace WebApi.Helpers.Services
 
                 foreach (var entity in products)
                 {
-                    //ProductDTO product = entity;
+          
                     dtos.Add(entity);
                 }
 

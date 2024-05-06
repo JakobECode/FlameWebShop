@@ -46,21 +46,6 @@ namespace WebApi.Controllers
             return NotFound("No order found");
         }
 
-        //[Route("GetBySignedIn")]
-        //[HttpGet]
-        //public async Task<IActionResult> GetBySignedInUser()
-        //{
-        //    var userEmail = HttpContext.User.Identity!.Name;
-        //    if (string.IsNullOrEmpty(userEmail))
-        //        return BadRequest("You must be signed in to use this method");
-
-        //    var result = await _orderService.GetBySignedInUser(userEmail!);
-        //    if (result != null)
-        //        return Ok(result);
-
-        //    return NotFound("No orders found");
-        //}
-
         [Route("GetByUserId/{id}")]
         [HttpGet]
         public async Task<IActionResult> GetByUserId(int Id)

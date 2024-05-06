@@ -25,7 +25,6 @@ namespace WebApi.Models.Dtos
                 Quantity = entity.Quantity,
                 OrderStatus = entity.OrderStatus,
                 Email = entity.Email,
-               // Items = entity.Items,
                 StreetName = entity.StreetName,
                 PostalCode = entity.PostalCode,
                 City = entity.City,

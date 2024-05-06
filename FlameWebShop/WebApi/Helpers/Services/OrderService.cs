@@ -5,6 +5,7 @@ using WebApi.Models.Entities;
 using WebApi.Models.Interfaces;
 using WebApi.Models.Schemas;
 using WebApi.Helpers.Repositories;
+using Twilio.TwiML.Voice;
 
 namespace WebApi.Helpers.Services
 {
@@ -19,12 +20,66 @@ namespace WebApi.Helpers.Services
 
         public OrderService(OrderRepository orderRepo, UserManager<IdentityUser> userManager, IMailService mailService, IProductService productService, ProductRepository productRepo, OrderItemRepository orderItemRepository)
         {
-            _orderItemRepo = orderItemRepository;
+            
             _orderRepo = orderRepo;
+            _orderItemRepo = orderItemRepository;
             _userManager = userManager;
             _mailService = mailService;
             _productService = productService;
             _productRepo = productRepo;
+        }
+
+        public async Task<OrderDto?> GetByOrderIdAsync(int orderId)
+        {
+            try
+            {
+                // Retrieve the order by ID
+                var order = await _orderRepo.GetAsync(x => x.Id == orderId);
+                if (order == null) return null;  // Return null if no order found
+
+                // Retrieve order items for this order
+                var orderItems = await _orderItemRepo.GetListAsync(x => x.OrderId == orderId);
+                if (orderItems == null) return null; // Return null if no items found
+
+                // Retrieve all products - consider optimizing this if too many products
+                var products = await _productRepo.GetAllAsync();
+
+                // Map order data to OrderDto
+                var dto = new OrderDto
+                {
+                    Id = order.Id,
+                    OrderDate = order.OrderDate,
+                    OrderStatus = order.OrderStatus,
+                    Items = new List<ProductDto>()
+                };
+
+                // Filter and map order items to ProductDto
+                foreach (var item in orderItems)
+                {
+                    var product = products.FirstOrDefault(p => p.Id == item.ProductId);
+                    if (product != null)
+                    {
+                        dto.Items.Add(new ProductDto
+                        {
+                            Id = product.Id,
+                            Name = product.Name,
+                            Category = product.Category,
+                            Price = product.Price,
+                            ImageUrl = product.ImageUrl,
+                            Description = product.Description,
+                            CreatedDate = product.CreatedDate,
+                        });
+                    }
+                }
+
+                return dto;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it otherwise
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return null;
+            }
         }
 
         public async Task<IEnumerable<OrderDto>> GetAllOrdersAsync()
@@ -44,26 +99,6 @@ namespace WebApi.Helpers.Services
                 }
 
                 return dtos;
-            }
-            catch { }
-            return null!;
-        }
-
-        public async Task<OrderDto> GetByOrderIdAsync(int orderId)
-        {
-            try
-            {
-                var currentDate = DateTime.Now;
-                var order = await _orderRepo.GetAsync(x => x.Id == orderId);
-                var orderItem = await _orderItemRepo.GetAsync( x => x.OrderId == orderId);
-
-                var status = order.OrderStatus;
-                var orderDate = order.OrderDate;
-
-                OrderDto dto = order;
-                dto.Items =  
-
-                return dto;
             }
             catch { }
             return null!;
@@ -144,17 +179,6 @@ namespace WebApi.Helpers.Services
                         Country = schema.Country,
                     };
 
-                    //foreach (var item in orderItems)
-                    //{
-                    //    var product = await _productRepo.GetAsync(x => x.Id == item.ProductId);
-
-                    //    var orderItem = new OrderItemEntity
-                    //    {
-                    //        ProductId = item.ProductId,
-                    //    };
-                    //    order.Items.Add(orderItem);
-                    //}
-
                     await _orderRepo.AddAsync(order);
 
                     var email = new MailData(new List<string> { userEmail }, "Order confirmation", $"Your order with Id: {order.Id} has been recieved! We will ship your items to you shortly.");
@@ -162,8 +186,6 @@ namespace WebApi.Helpers.Services
 
                     return true;
                 }
-
-
             }
             catch { }
             return false;

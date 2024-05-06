@@ -26,7 +26,8 @@ namespace WebApi
             builder.Services.AddSwaggerGen();
 
             #region DbContexts
-            builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("DBFlameShopCS")));
+            builder.Services.AddDbContext<DataContext>(x => 
+            x.UseSqlServer(builder.Configuration.GetConnectionString("DBFlameShopCS")));
             #endregion
 
             #region EmailConfig
@@ -37,7 +38,6 @@ namespace WebApi
             #region Helpers / Services 
             builder.Services.AddScoped<JwtToken>();
             builder.Services.AddScoped<IAccountService, AccountService>();
-           // builder.Services.AddScoped<IAddressService, AddressService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IMailService, MailService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
@@ -48,14 +48,13 @@ namespace WebApi
             #endregion
 
             #region Repositories
-            //builder.Services.AddScoped<AddressItemRepository>();
-            //builder.Services.AddScoped<AddressRepository>();
+            
             builder.Services.AddScoped<CategoryRepository>();
             builder.Services.AddScoped<CreditCardRepository>();
             builder.Services.AddScoped<OrderRepository>();
+            builder.Services.AddScoped<OrderItemRepository>();
             builder.Services.AddScoped<ProductRepository>();
             builder.Services.AddScoped<ReviewRepository>();
-           // builder.Services.AddScoped<UserProfileAddressItemRepository>();
             builder.Services.AddScoped<UserProfileCreditCardRepository>();
             builder.Services.AddScoped<UserProfileRepository>();
             #endregion
