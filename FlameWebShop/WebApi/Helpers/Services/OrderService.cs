@@ -50,6 +50,12 @@ namespace WebApi.Helpers.Services
                     Id = order.Id,
                     OrderDate = order.OrderDate,
                     OrderStatus = order.OrderStatus,
+                    Email = order.Email,
+                    StreetName = order.StreetName,
+                    PostalCode = order.PostalCode,
+                    City = order.City,
+                    Country = order.Country,
+                    Quantity = order.Quantity,
                     Items = new List<ProductDto>()
                 };
 

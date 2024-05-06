@@ -6,6 +6,7 @@ namespace WebApi.Models.Entities
     public class OrderEntity
     {
         [Key]
+        [Required]
         public int Id { get; set; }
 
         [Required]
