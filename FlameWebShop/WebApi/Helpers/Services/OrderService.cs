@@ -6,6 +6,7 @@ using WebApi.Models.Interfaces;
 using WebApi.Models.Schemas;
 using WebApi.Helpers.Repositories;
 using Twilio.TwiML.Voice;
+using MailKit.Search;
 
 namespace WebApi.Helpers.Services
 {
@@ -41,7 +42,7 @@ namespace WebApi.Helpers.Services
                 var orderItems = await _orderItemRepo.GetListAsync(x => x.OrderId == orderId);
                 if (orderItems == null) return null; // Return null if no items found
 
-                // Retrieve all products - consider optimizing this if too many products
+                // Retrieve all products 
                 var products = await _productRepo.GetAllAsync();
 
                 // Map order data to OrderDto
@@ -162,30 +163,44 @@ namespace WebApi.Helpers.Services
             return false;
         }
 
-        public async Task<bool> CreateOrderAsync(OrderDto schema, string userEmail)
+        public async Task<bool> CreateOrderAsync(CreateOrderDto orderDto, string userEmail)
         {
             try
             {
-                var orderItems = schema.Items;
+
+                var orderItems = orderDto.Items;
                 var user = await _userManager.FindByEmailAsync(userEmail);
-                //var address = await _addressRepo.GetAsync(x => x.Id == schema.AddressId);
 
                 if (user != null)
                 {
                     var order = new OrderEntity
                     {
                         UserId = user?.Id,
-                        Quantity = schema.Quantity,
+                        Quantity = orderDto.Quantity,
                         OrderDate = DateTime.Now,
                         OrderStatus = "Pending",
-                        Email = schema.Email,
-                        StreetName = schema.StreetName,   
-                        PostalCode = schema.PostalCode,   
-                        City = schema.City,        
-                        Country = schema.Country,
+                        Email = orderDto.Email,
+                        StreetName = orderDto.StreetName,   
+                        PostalCode = orderDto.PostalCode,   
+                        City = orderDto.City,        
+                        Country = orderDto.Country,
+                        
+                    };
+                    var newOrder = await _orderRepo.AddAsync(order);
+
+                    foreach (var item in orderItems)
+                    {
+                        var OrderItemEntity = new OrderItemEntity()
+                        {
+                            OrderId = newOrder.Id,
+                            ProductId = item
+                        };
+
+                        var orderItemsRepo = await _orderItemRepo.AddAsync(OrderItemEntity);
+
+
                     };
 
-                    await _orderRepo.AddAsync(order);
 
                     var email = new MailData(new List<string> { userEmail }, "Order confirmation", $"Your order with Id: {order.Id} has been recieved! We will ship your items to you shortly.");
                     var result = await _mailService.SendAsync(email, new CancellationToken());

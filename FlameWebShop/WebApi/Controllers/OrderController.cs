@@ -61,11 +61,11 @@ namespace WebApi.Controllers
         [Route("CreateOrder")]
         [HttpPost]
         //[Authorize]
-        public async Task<IActionResult> CreateOrder(OrderDto schema)
+        public async Task<IActionResult> CreateOrder(CreateOrderDto dto)
         {
             var userEmail = HttpContext.User.Identity!.Name;
             userEmail = "Test@gmail.com";
-            var result = await _orderService.CreateOrderAsync(schema, userEmail);
+            var result = await _orderService.CreateOrderAsync(dto, userEmail);
             if (result)
                 return Created("", null); // Ideally, you should include a URI to the newly created resource here
 

@@ -10,7 +10,7 @@ namespace WebApi.Models.Interfaces
         Task<OrderDto> GetByOrderIdAsync(int orderId);
         Task<IEnumerable<OrderDto>> GetOrdersByUserIdAsync(int userId);
         Task<bool> CancelOrder(OrderCancelSchema schema);
-        Task<bool> CreateOrderAsync(OrderDto schema, string userEmail);
+        Task<bool> CreateOrderAsync(CreateOrderDto schema, string userEmail);
         Task<bool> DeleteOrder(int orderId);
     }
 }
