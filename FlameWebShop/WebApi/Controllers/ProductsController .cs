@@ -20,6 +20,7 @@ namespace WebApi.Controllers
 
         [Route("All")]
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             if (ModelState.IsValid)
