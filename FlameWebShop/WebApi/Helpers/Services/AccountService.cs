@@ -65,7 +65,7 @@ namespace WebApi.Helpers.Services
                             //var confirmationLink = $"{_configuration.GetSection("Urls").GetValue<string>("ApiUrl")}api/mail/confirmemail?email={WebUtility.UrlEncode(identityUser.Email)}&token={WebUtility.UrlEncode(token)}";
                             //var email = new MailData(new List<string> { identityUser.Email! }, "Confirmation link", $"Press {confirmationLink} to confirm your emailaddress");
                             //var result = await _mailService.SendAsync(email, new CancellationToken());
-                            //return true;
+                            return true;
                         }
                     }
                 }

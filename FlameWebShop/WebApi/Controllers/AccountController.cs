@@ -30,10 +30,17 @@ namespace WebApi.Controllers
             {
                 if (await _accountService.RegisterAsync(schema))
                 {
-                    return Created("", null);
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest("Something went wrong, try again!");
                 }
             }
-            return BadRequest("Something went wrong, try again!");
+            else
+            {
+                return BadRequest("Something went wrong, try again!");
+            }
         }
         [Route("Login")]
         [HttpPost]
