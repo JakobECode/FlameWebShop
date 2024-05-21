@@ -75,7 +75,7 @@ namespace WebApi.Helpers.Services
             return false;
         }
 
-        public async Task<string> LogInAsync(LoginAccountSchema schema)
+        public async Task<LoginResponse> LogInAsync(LoginAccountSchema schema)
         {
             var identityUser = await _userManager.FindByEmailAsync(schema.Email);
             if (identityUser != null)
@@ -93,14 +93,21 @@ namespace WebApi.Helpers.Services
 
                     await _signInManager.SignInAsync(identityUser, isPersistent: schema.RememberMe);
 
-                    if (schema.RememberMe == false)
-                        return _jwt.GenerateToken(claimsIdentity, DateTime.Now.AddHours(1));
+                    var loginResponse = new LoginResponse()
+                    {
+                        role = role[0],
+                        token = _jwt.GenerateToken(claimsIdentity, DateTime.Now.AddHours(1))
+                    };
 
-                    else
-                        return _jwt.GenerateToken(claimsIdentity, DateTime.Now.AddYears(1));
+                    if (schema.RememberMe == false)
+                        return loginResponse;
+
+
+                    //else
+                    //    return _jwt.GenerateToken(claimsIdentity, DateTime.Now.AddYears(1));
                 }
             }
-            return string.Empty;
+            return null;
         }
 
         public async Task<string> LogInExternalAsync(ExternalLoginInfo externalUser)

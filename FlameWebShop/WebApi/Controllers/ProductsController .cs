@@ -20,7 +20,7 @@ namespace WebApi.Controllers
 
         [Route("All")]
         [HttpGet]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetAll()
         {
             if (ModelState.IsValid)
@@ -91,7 +91,7 @@ namespace WebApi.Controllers
 
         [Route("Add")]
         [HttpPost]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> AddProduct(ProductSchema schema)
         {
             if (ModelState.IsValid)
@@ -106,7 +106,7 @@ namespace WebApi.Controllers
 
         [Route("Delete/{id}")]
         [HttpDelete]
-        // [Authorize]
+        [Authorize]
         public async Task<IActionResult> DeleteProduct(int id)
         {
             var result = await _productService.DeleteAsync(id);
@@ -118,7 +118,7 @@ namespace WebApi.Controllers
 
         [Route("Update")]
         [HttpPut]
-        // [Authorize]
+        [Authorize]
         public async Task<IActionResult> UpdateProduct(ProductSchema schema)
         {
             var result = await _productService.UpdateAsync(schema);
