@@ -48,9 +48,11 @@ namespace WebApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                var token = await _accountService.LogInAsync(schema);
-                if (!string.IsNullOrEmpty(token))
-                    return Ok(token);
+                var loginResponse = await _accountService.LogInAsync(schema);
+                if (loginResponse != null && !string.IsNullOrEmpty(loginResponse.token))
+                {
+                    return Ok(new { Token = loginResponse.token, Role = loginResponse.role, loginResponse.Email });
+                }
             }
             return BadRequest("Incorrect email or password");
         }

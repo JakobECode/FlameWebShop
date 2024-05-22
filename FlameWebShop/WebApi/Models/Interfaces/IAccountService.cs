@@ -7,7 +7,7 @@ namespace WebApi.Models.Interfaces
     public interface IAccountService
     {
         Task<bool> RegisterAsync(RegisterAccountSchema schema);
-        Task<string> LogInAsync(LoginAccountSchema schema);
+        Task<LoginResponse> LogInAsync(LoginAccountSchema schema);
         Task<string> LogInExternalAsync(ExternalLoginInfo externalUser);
         Task LogOutAsync();
         Task<UserProfileDto> ReturnProfileAsync(string Id);
@@ -19,10 +19,5 @@ namespace WebApi.Models.Interfaces
         Task<bool> ResetPassword(string email);
         Task<bool> ChangePassword(RecoverPasswordSchema schema);
         Task<bool> ChangePassword(ChangePasswordSchema schema, string email);
-        
-        
-        
-        
-        
     }
 }

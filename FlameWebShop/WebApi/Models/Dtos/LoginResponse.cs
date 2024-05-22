@@ -4,5 +4,6 @@
     {
         public string role { get; set; }
         public string token { get; set; }
+        public string? Email { get; set; }
     }
 }

@@ -96,13 +96,12 @@ namespace WebApi.Helpers.Services
                     var loginResponse = new LoginResponse()
                     {
                         role = role[0],
+                        Email = identityUser.Email,
                         token = _jwt.GenerateToken(claimsIdentity, DateTime.Now.AddHours(1))
                     };
 
                     if (schema.RememberMe == false)
                         return loginResponse;
-
-
                     //else
                     //    return _jwt.GenerateToken(claimsIdentity, DateTime.Now.AddYears(1));
                 }
